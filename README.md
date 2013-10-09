@@ -1,0 +1,1 @@
+Takes 2 input files (one english, one spanish) and uses letter-weighting to guess the language of the input file
