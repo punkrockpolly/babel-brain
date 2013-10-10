@@ -35,7 +35,7 @@ def random_weights():
 
 
 def classification_score(sentance, weights):
-    # input sentance
+    # input sentance and weights, mutiply then return score
     score = 0
 
     for letter in string.ascii_lowercase:
