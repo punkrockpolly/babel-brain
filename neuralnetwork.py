@@ -70,34 +70,57 @@ def is_english(sentence, weights, threshold):
         return False
 
 
-# guess = def_letter_weights()
-# guess['i'] = -2
-# guess['a'] = -4
-threshold = 50
-
-
 print sentance_length_normalized_score("a sent t ", 120)
 
 
-def guess_weights(weights):
-    print 'English sentences'
-    english = sentences('english-sentences.txt')
-    english_correct = 0
-    for sentence in english:
-        if is_english(sentence, weights, threshold):
-            english_correct += 1
+class CharWeights(object):
+    def __init__(self):
+        self.weights = def_letter_weights()
+        self.best_score = self.english_guesses_correct()
+        self.english_sentances = sentences('english-sentences.txt')
+        self.spanish_sentances = sentences('spanish-sentences-short.txt')
+        self.english_correct = 0
+        self.spanish_correct = 0
+        self.threshold = 50
 
-    print 'Spanish sentences'
-    spanish = sentences('spanish-sentences-short.txt')
-    spanish_correct = 0
-    for sentence in spanish:
-        if not is_english(sentence, weights, threshold):
-            spanish_correct += 1
+    def english_guesses_correct(self):
+        for sentence in self.english_sentances:
+            if is_english(self.sentence, self.weights, self.threshold):
+                self.english_correct += 1
+        return self.english_correct
 
-    print 'total english:', len(english)
-    print 'english correct:', english_correct
-    print 'total spanish:', len(spanish)
-    print 'spanish correct:', spanish_correct
-    print 'total correct:', english_correct + spanish_correct
+    def spanish_guesses_correct(self):
+        for sentence in self.spanish_sentances:
+            if not is_english(self.sentence, self.weights, self.threshold):
+                self.spanish_correct += 1
+        return self.spanish_correct
 
-#guess_weights(guess)
+    def best_weights(self):
+        self.best_weights = self.weights
+        for letter in string.ascii_lowercase:
+            for x in range(-5, 6):
+                self.weights[letter] = x
+                self.new_score = self.english_guesses_correct()
+                if self.new_score > self.best_score:
+                    self.best_score = self.new_score
+                    self.best_weights[letter] = x
+        return self.best_weights
+
+    def __str__(self):
+        output_string = ''
+        output_string += 'total english:' + len(self.english_sentances) + '/n'
+        output_string += 'english correct:' + self.english_correct + '/n'
+        output_string += 'total spanish:', len(self.spanish_sentances) + '/n'
+        output_string += 'spanish correct:', self.spanish_correct + '/n'
+        output_string += 'total correct:', self.english_correct + self.spanish_correct
+        return output_string
+
+# Language_Bot = CharWeights()
+# Language_Bot.update_weights()
+
+# for thischar in Chars:
+#     bestWeigt = languageBot.findbestWeight(thisChar)
+#     languageBot.updateWeight(thischar, bestWight)
+
+# # now we have optimal weight
+#     languageBot.showWeghts()
