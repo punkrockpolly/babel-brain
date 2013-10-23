@@ -75,7 +75,7 @@ def is_english(sentence, weights, threshold):
 # threshold = 50
 
 
-print sentance_length_normalized_score("a sent t ", 120)
+print sentance_length_normalized_score("aeee sent teer ", 120)
 
 
 def guess_weights(weights):
