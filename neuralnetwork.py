@@ -4,7 +4,7 @@ import random
 
 def sentences(filename):
     # builds list of sentances from input file, then strips empty lines
-    
+
     sentences = open(filename)
     rawinput = sentences.read().lower()
 
@@ -32,7 +32,7 @@ def random_weights():
 
     letterDic = {}
     for letter in string.ascii_lowercase:
-        letterDic[letter] = random.randint(1, 10)
+        letterDic[letter] = random.randint(-10, 10)
     return letterDic
 
 
@@ -57,7 +57,7 @@ def is_english(sentence, weights, threshold):
 
 guess = def_letter_weights()
 guess['i'] = -2
-guess['a'] = -4
+guess['a'] = -3
 threshold = 50
 
 
