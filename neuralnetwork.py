@@ -12,8 +12,9 @@ def sentences(filename):
 
     new_list = []
     for sentence in input_list:
-        if sentence.strip() != "":
-            new_list.append(sentence)
+        stripped = sentence.strip()
+        if stripped != "":
+            new_list.append(stripped)
 
     return new_list
 
@@ -80,7 +81,7 @@ class CharWeights(object):
         self.threshold = 50
         self.weights = def_letter_weights()
         self.english_sentences = sentences('english-sentences.txt')
-        self.spanish_sentences = sentences('spanish-sentences-short.txt')
+        self.spanish_sentences = sentences('spanish-sentences.txt')
         self.best_score = self.english_guesses_correct()
 
     def english_guesses_correct(self):
@@ -102,19 +103,19 @@ class CharWeights(object):
         for letter in string.ascii_lowercase:
             for x in range(-5, 6):
                 self.weights[letter] = x
-                self.new_score = self.english_guesses_correct()
+                self.new_score = self.english_guesses_correct() + self.spanish_guesses_correct()
                 if self.new_score > self.best_score:
                     self.best_score = self.new_score
                     self.best_weights[letter] = x
         return self.best_weights
 
     def __str__(self):
-        output_string = ''
+        output_string = '=====\n'
         output_string += 'total english:' + str(len(self.english_sentences)) + '\n'
         output_string += 'english correct:' + str(self.english_correct) + '\n'
         output_string += 'total spanish:' + str(len(self.spanish_sentences)) + '\n'
         output_string += 'spanish correct:' + str(self.spanish_correct) + '\n'
-        output_string += 'total correct:' + str(self.english_correct) + str(self.spanish_correct)
+        output_string += 'total correct:' + str(self.english_correct + self.spanish_correct)
         return output_string
 
 # Language_Bot.update_weights()
@@ -127,7 +128,8 @@ class CharWeights(object):
 #     languageBot.showWeghts()
 
 Language_Bot = CharWeights()
+print Language_Bot.weights
 print Language_Bot
 Language_Bot.best_weights()
 print Language_Bot
-
+print Language_Bot.weights
