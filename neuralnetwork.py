@@ -4,6 +4,7 @@ import random
 
 def sentences(filename):
     # builds list of sentances from input file, then strips empty lines
+    
     sentences = open(filename)
     rawinput = sentences.read().lower()
 
@@ -45,9 +46,9 @@ def classification_score(sentance, weights):
     return score
 
 
-def is_english(sentence, weights):
+def is_english(sentence, weights, threshold):
     score = classification_score(sentence, weights)
-    if score > 50:
+    if score > threshold:
         print "We think this is English", sentence
         return True
     else:
@@ -57,6 +58,7 @@ def is_english(sentence, weights):
 guess = def_letter_weights()
 guess['i'] = -2
 guess['a'] = -4
+threshold = 50
 
 
 def guess_weights(weights):
@@ -64,14 +66,14 @@ def guess_weights(weights):
     english = sentences('english-sentences.txt')
     english_correct = 0
     for sentence in english:
-        if is_english(sentence, weights):
+        if is_english(sentence, weights, threshold):
             english_correct += 1
 
     print 'Spanish sentences'
     spanish = sentences('spanish-sentences-short.txt')
     spanish_correct = 0
     for sentence in spanish:
-        if not is_english(sentence, weights):
+        if not is_english(sentence, weights, threshold):
             spanish_correct += 1
 
     print 'total english:', len(english)
