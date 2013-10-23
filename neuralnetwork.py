@@ -45,6 +45,11 @@ def classification_score(sentance, weights):
 
     return score
 
+def sentance_length_normalized_score(sentance, score):
+    # returns a score that immune to sentance length, 
+    #   thereby highlighing only the results of freq analysis
+    return (score / len(sentance))
+
 
 def is_english(sentence, weights, threshold):
     score = classification_score(sentence, weights)
