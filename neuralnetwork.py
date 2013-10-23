@@ -84,12 +84,14 @@ class CharWeights(object):
         self.best_score = self.english_guesses_correct()
 
     def english_guesses_correct(self):
+        self.english_correct = 0
         for sentence in self.english_sentences:
             if is_english(sentence, self.weights, self.threshold):
                 self.english_correct += 1
         return self.english_correct
 
     def spanish_guesses_correct(self):
+        self.spanish_correct = 0
         for sentence in self.spanish_sentences:
             if not is_english(sentence, self.weights, self.threshold):
                 self.spanish_correct += 1
