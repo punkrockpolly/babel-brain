@@ -46,6 +46,20 @@ def classification_score(sentance, weights):
     return score
 
 
+def sentance_length_normalized_score(sentance, score):
+    # returns a score that immune to sentance length,
+    # thereby highlighing only the results of freq analysis
+    total_valid_chars = 0
+    for letter in string.ascii_lowercase:
+            total_valid_chars += sentance.count(letter)
+    if total_valid_chars != 0:
+        return (float(score)/total_valid_chars)
+    else:
+        # this will have to change in the future as the thresholds
+        # become more sophisticated.
+        return 0
+
+
 def is_english(sentence, weights, threshold):
     score = classification_score(sentence, weights)
     if score > threshold:
@@ -55,10 +69,14 @@ def is_english(sentence, weights, threshold):
         #print "We think this is Spanish", sentence
         return False
 
-guess = def_letter_weights()
-guess['i'] = -2
-guess['a'] = -3
+
+# guess = def_letter_weights()
+# guess['i'] = -2
+# guess['a'] = -4
 threshold = 50
+
+
+print sentance_length_normalized_score("a sent t ", 120)
 
 
 def guess_weights(weights):
@@ -82,4 +100,4 @@ def guess_weights(weights):
     print 'spanish correct:', spanish_correct
     print 'total correct:', english_correct + spanish_correct
 
-guess_weights(guess)
+#guess_weights(guess)
