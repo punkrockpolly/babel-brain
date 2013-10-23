@@ -1,7 +1,7 @@
 import string
 import random
 
-
+#test
 def sentences(filename):
     # builds list of sentances from input file, then strips empty lines
     
