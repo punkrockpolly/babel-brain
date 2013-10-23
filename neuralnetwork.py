@@ -3,7 +3,7 @@ import random
 
 
 def sentences(filename):
-    # builds list of sentances from input file, then strips empty lines
+    # builds list of sentences from input file, then strips empty lines
 
     sentences = open(filename)
     rawinput = sentences.read().lower()
@@ -11,9 +11,9 @@ def sentences(filename):
     input_list = rawinput.split("\n")
 
     new_list = []
-    for sentance in input_list:
-        if sentance.strip() != "":
-            new_list.append(sentance)
+    for sentence in input_list:
+        if sentence.strip() != "":
+            new_list.append(sentence)
 
     return new_list
 
@@ -36,22 +36,22 @@ def random_weights():
     return letterDic
 
 
-def classification_score(sentance, weights):
-    # input sentance and weights, mutiply then return score
+def classification_score(sentence, weights):
+    # input sentence and weights, mutiply then return score
     score = 0
 
     for letter in string.ascii_lowercase:
-            score += sentance.count(letter) * weights[letter]
+            score += sentence.count(letter) * weights[letter]
 
     return score
 
 
-def sentance_length_normalized_score(sentance, score):
-    # returns a score that immune to sentance length,
+def sentence_length_normalized_score(sentence, score):
+    # returns a score that immune to sentence length,
     # thereby highlighing only the results of freq analysis
     total_valid_chars = 0
     for letter in string.ascii_lowercase:
-            total_valid_chars += sentance.count(letter)
+            total_valid_chars += sentence.count(letter)
     if total_valid_chars != 0:
         return (float(score)/total_valid_chars)
     else:
@@ -70,28 +70,28 @@ def is_english(sentence, weights, threshold):
         return False
 
 
-print sentance_length_normalized_score("a sent t ", 120)
+print sentence_length_normalized_score("a sent t ", 120)
 
 
 class CharWeights(object):
     def __init__(self):
-        self.weights = def_letter_weights()
-        self.best_score = self.english_guesses_correct()
-        self.english_sentances = sentences('english-sentences.txt')
-        self.spanish_sentances = sentences('spanish-sentences-short.txt')
         self.english_correct = 0
         self.spanish_correct = 0
         self.threshold = 50
+        self.weights = def_letter_weights()
+        self.english_sentences = sentences('english-sentences.txt')
+        self.spanish_sentences = sentences('spanish-sentences-short.txt')
+        self.best_score = self.english_guesses_correct()
 
     def english_guesses_correct(self):
-        for sentence in self.english_sentances:
-            if is_english(self.sentence, self.weights, self.threshold):
+        for sentence in self.english_sentences:
+            if is_english(sentence, self.weights, self.threshold):
                 self.english_correct += 1
         return self.english_correct
 
     def spanish_guesses_correct(self):
-        for sentence in self.spanish_sentances:
-            if not is_english(self.sentence, self.weights, self.threshold):
+        for sentence in self.spanish_sentences:
+            if not is_english(sentence, self.weights, self.threshold):
                 self.spanish_correct += 1
         return self.spanish_correct
 
@@ -108,14 +108,13 @@ class CharWeights(object):
 
     def __str__(self):
         output_string = ''
-        output_string += 'total english:' + len(self.english_sentances) + '/n'
-        output_string += 'english correct:' + self.english_correct + '/n'
-        output_string += 'total spanish:', len(self.spanish_sentances) + '/n'
-        output_string += 'spanish correct:', self.spanish_correct + '/n'
-        output_string += 'total correct:', self.english_correct + self.spanish_correct
+        output_string += 'total english:' + str(len(self.english_sentences)) + '\n'
+        output_string += 'english correct:' + str(self.english_correct) + '\n'
+        output_string += 'total spanish:' + str(len(self.spanish_sentences)) + '\n'
+        output_string += 'spanish correct:' + str(self.spanish_correct) + '\n'
+        output_string += 'total correct:' + str(self.english_correct) + str(self.spanish_correct)
         return output_string
 
-# Language_Bot = CharWeights()
 # Language_Bot.update_weights()
 
 # for thischar in Chars:
@@ -124,3 +123,9 @@ class CharWeights(object):
 
 # # now we have optimal weight
 #     languageBot.showWeghts()
+
+Language_Bot = CharWeights()
+print Language_Bot
+Language_Bot.best_weights()
+print Language_Bot
+
