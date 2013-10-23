@@ -49,10 +49,10 @@ def classification_score(sentance, weights):
 def is_english(sentence, weights, threshold):
     score = classification_score(sentence, weights)
     if score > threshold:
-        print "We think this is English", sentence
+        #print "We think this is English", sentence
         return True
     else:
-        print "We think this is Spanish", sentence
+        #print "We think this is Spanish", sentence
         return False
 
 guess = def_letter_weights()
