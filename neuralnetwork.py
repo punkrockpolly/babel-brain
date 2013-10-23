@@ -17,7 +17,7 @@ def sentences(filename):
         if stripped != "":
             new_list.append(stripped)
         else:
-            num_removed +=1
+            num_removed += 1
 
     print str(num_removed) + ":" + filename
     return new_list
@@ -48,7 +48,7 @@ def classification_score(sentence, weights):
     for letter in string.ascii_lowercase:
             score += sentence.count(letter) * weights[letter]
 
-    return sentence_length_normalized_score(sentence,score)
+    return sentence_length_normalized_score(sentence, score)
 
 
 def sentence_length_normalized_score(sentence, score):
@@ -68,7 +68,7 @@ def sentence_length_normalized_score(sentence, score):
 def guess_is_english(sentence, weights):
     threshold_high = 10
     threshold_low = 0
-    
+
     score = classification_score(sentence, weights)
     if score < threshold_high and score > threshold_low:
         #print "We think this is English", sentence
@@ -86,6 +86,7 @@ class CharWeights(object):
         self.english_correct = 0
         self.spanish_correct = 0
         self.weights = def_letter_weights()
+        self.best_weights = self.weights
         self.english_sentences = sentences('english-sentences.txt')
         self.spanish_sentences = sentences('spanish-sentences.txt')
         self.best_score = self.english_guesses_correct()
@@ -104,8 +105,7 @@ class CharWeights(object):
                 self.spanish_correct += 1
         return self.spanish_correct
 
-    def best_weights(self):
-        self.best_weights = self.weights
+    def find_best_weights(self):
         for letter in string.ascii_lowercase:
             for x in range(-5, 6):
                 self.weights[letter] = x
@@ -134,8 +134,8 @@ class CharWeights(object):
 #     languageBot.showWeghts()
 
 Language_Bot = CharWeights()
-print Language_Bot.weights
+print Language_Bot.best_weights
 print Language_Bot
-Language_Bot.best_weights()
+Language_Bot.find_best_weights()
 print Language_Bot
-print Language_Bot.weights
+print Language_Bot.best_weights
