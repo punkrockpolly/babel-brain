@@ -10,12 +10,16 @@ def sentences(filename):
 
     input_list = rawinput.split("\n")
 
+    num_removed = 0
     new_list = []
     for sentence in input_list:
         stripped = sentence.strip()
         if stripped != "":
             new_list.append(stripped)
+        else:
+            num_removed +=1
 
+    print str(num_removed) + ":" + filename
     return new_list
 
 
@@ -44,7 +48,7 @@ def classification_score(sentence, weights):
     for letter in string.ascii_lowercase:
             score += sentence.count(letter) * weights[letter]
 
-    return score
+    return sentence_length_normalized_score(sentence,score)
 
 
 def sentence_length_normalized_score(sentence, score):
@@ -61,9 +65,12 @@ def sentence_length_normalized_score(sentence, score):
         return 0
 
 
-def is_english(sentence, weights, threshold):
+def guess_is_english(sentence, weights):
+    threshold_high = 10
+    threshold_low = 0
+    
     score = classification_score(sentence, weights)
-    if score > threshold:
+    if score < threshold_high and score > threshold_low:
         #print "We think this is English", sentence
         return True
     else:
@@ -78,7 +85,6 @@ class CharWeights(object):
     def __init__(self):
         self.english_correct = 0
         self.spanish_correct = 0
-        self.threshold = 50
         self.weights = def_letter_weights()
         self.english_sentences = sentences('english-sentences.txt')
         self.spanish_sentences = sentences('spanish-sentences.txt')
@@ -87,14 +93,14 @@ class CharWeights(object):
     def english_guesses_correct(self):
         self.english_correct = 0
         for sentence in self.english_sentences:
-            if is_english(sentence, self.weights, self.threshold):
+            if guess_is_english(sentence, self.weights):
                 self.english_correct += 1
         return self.english_correct
 
     def spanish_guesses_correct(self):
         self.spanish_correct = 0
         for sentence in self.spanish_sentences:
-            if not is_english(sentence, self.weights, self.threshold):
+            if not guess_is_english(sentence, self.weights):
                 self.spanish_correct += 1
         return self.spanish_correct
 
