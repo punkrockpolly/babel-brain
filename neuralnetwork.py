@@ -51,7 +51,13 @@ def sentance_length_normalized_score(sentance, score):
     total_valid_chars = 0
     for letter in string.ascii_lowercase:
             total_valid_chars += sentance.count(letter)    
-    return (float(score)/total_valid_chars)
+    
+    if total_valid_chars != 0:
+        return (float(score)/total_valid_chars)
+    else:
+        # this will have to change in the future as the thresholds
+        # become more sophisticated.
+        return 0
 
 
 def is_english(sentence, weights, threshold):
@@ -69,7 +75,7 @@ def is_english(sentence, weights, threshold):
 # threshold = 50
 
 
-print sentance_length_normalized_score("This is a sentance", 120)
+print sentance_length_normalized_score("a sent t ", 120)
 
 
 def guess_weights(weights):
