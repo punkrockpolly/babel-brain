@@ -1,6 +1,7 @@
 import string
 import random
 
+
 def sentences(filename):
     # builds list of sentences from input file, then strips empty lines
     sentences = open(filename)
@@ -20,22 +21,11 @@ def sentences(filename):
     return new_list
 
 
-def extract_features(string_input):
-    charfreq = normalized_char_frequencies(string_input)
-    avg_sentance_len = avg_sentance_len(string_input)
-    avg_word_len = avg_word_len(string_input)
-    features = dict() 
-    
-    features['word_len'] = avg_word_len
-    features['sent_len'] = avg_sentance_len
-    features['char_freq'] = 0
-    return features
-
-
 def avg_word_len(string_input):
     words = string_input.count(' ')
     total_chars_in_words = len(string_input.strip(' '))
     return total_chars_in_words / float(words)
+
 
 def avg_sentance_len(string_input):
     words = string_input.count('.')
@@ -50,6 +40,7 @@ def def_letter_weights():
         letterDic[letter] = 1
     return letterDic
 
+
 def random_weights():
     # build dictionary of letters and their weights
     letterDic = {}
@@ -58,7 +49,19 @@ def random_weights():
     return letterDic
 
 
-def classification_score_general(feature_values,weights):
+def extract_features(string_input):
+    charfreq = normalized_char_frequencies(string_input)
+    avg_sentance_len = avg_sentance_len(string_input)
+    avg_word_len = avg_word_len(string_input)
+    features = dict()
+
+    features['word_len'] = avg_word_len
+    features['sent_len'] = avg_sentance_len
+    features['char_freq'] = 0
+    return features
+
+
+def classification_score_general(feature_values, weights):
 
     # features dict = featurename:normalizedfeatureValue
     # weight dict = featurename -> weight val
