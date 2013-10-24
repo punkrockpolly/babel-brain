@@ -1,5 +1,57 @@
 import string
 import random
+import json
+
+
+def isFile(filename):
+    try:
+        with open(filename):
+            return True
+    except IOError:
+        return False
+
+def dict_to_json(my_dict):
+    return json.dumps(my_dict)
+     
+def json_to_dict(my_json):
+    return json.loads(my_json)
+
+def save_knowledge(knowledge_dict):
+    write_to_file(dict_to_json(knowledge_dict))
+
+def get_knowledge():
+    if isFile('knowledge.txt'):
+        return json_to_dict(file_contents('knowledge.txt'))
+    else:
+        return def_feature_weights()
+
+def write_to_file(filename, data):
+    target = open(filename, 'w')
+    target.write(str(data))
+    target.close
+    return True
+
+def file_contents(filename):
+    txt = open(filename)
+    text = txt.read()
+    txt.close()
+    return text
+
+
+
+def isInCache(pLoc1,pLoc2):
+    filename = filenameGen(pLoc1,pLoc2)
+    return isFile(filename)
+
+
+def def_feature_weights():
+    # build dictionary of letters and their weights
+    letterDic = {}
+    for letter in string.ascii_lowercase:
+        letterDic[letter] = 1
+    return letterDic
+
+
 
 def sentences(filename):
     # builds list of sentences from input file, then strips empty lines
@@ -19,6 +71,20 @@ def sentences(filename):
     print str(num_removed) + ":" + filename
     return new_list
 
+def normalized_char_frequencies(string_input):
+    return 0
+
+def avg_word_len(string_input):
+    words = string_input.count(' ')
+    total_chars_in_words = len(string_input.strip(' '))
+    return total_chars_in_words / float(words)
+
+def avg_sentance_len(string_input):
+    words = string_input.count('.')
+    total_chars_in_sent = len(string_input.strip('.'))
+    return total_chars_in_sent / float(words)
+
+
 
 def extract_features(string_input):
     charfreq = normalized_char_frequencies(string_input)
@@ -32,34 +98,8 @@ def extract_features(string_input):
     return features
 
 
-def avg_word_len(string_input):
-    words = string_input.count(' ')
-    total_chars_in_words = len(string_input.strip(' '))
-    return total_chars_in_words / float(words)
-
-def avg_sentance_len(string_input):
-    words = string_input.count('.')
-    total_chars_in_sent = len(string_input.strip('.'))
-    return total_chars_in_sent / float(words)
-
-
-def def_letter_weights():
-    # build dictionary of letters and their weights
-    letterDic = {}
-    for letter in string.ascii_lowercase:
-        letterDic[letter] = 1
-    return letterDic
-
-def random_weights():
-    # build dictionary of letters and their weights
-    letterDic = {}
-    for letter in string.ascii_lowercase:
-        letterDic[letter] = random.randint(-10, 10)
-    return letterDic
-
 
 def classification_score_general(feature_values,weights):
-
     # features dict = featurename:normalizedfeatureValue
     # weight dict = featurename -> weight val
     score = 0
@@ -67,15 +107,12 @@ def classification_score_general(feature_values,weights):
         score += feature_value * weights[feature_value]
     return score
 
-
 def classification_score(sentence, weights):
     # input sentence and weights, mutiply then return score
     score = 0
     for letter in string.ascii_lowercase:
             score += sentence.count(letter) * weights[letter]
-
     return sentence_length_normalized_score(sentence, score)
-
 
 def sentence_length_normalized_score(sentence, score):
     # returns a score that immune to sentence length,
@@ -90,7 +127,6 @@ def sentence_length_normalized_score(sentence, score):
         # become more sophisticated.
         return 0
 
-
 def guess_is_english(sentence, weights, threshold=50):
     score = classification_score(sentence, weights)
     if score > threshold:
@@ -100,12 +136,11 @@ def guess_is_english(sentence, weights, threshold=50):
         #print "We think this is Spanish", sentence
         return False
 
-
 class CharWeights(object):
     def __init__(self):
         self.english_correct = 0
         self.spanish_correct = 0
-        self.weights = def_letter_weights()
+        self.weights = def_feature_weights()
         self.best_weights = self.weights
         self.english_sentences = sentences('english-sentences.txt')
         self.spanish_sentences = sentences('spanish-sentences.txt')
