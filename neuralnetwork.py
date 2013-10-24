@@ -1,5 +1,6 @@
 import string
 import json
+import collections
 
 
 def isFile(filename):
@@ -103,15 +104,21 @@ def extract_features(string_input):
     return features
 '''
 
+def sentence_to_normailized_frequency_values_dict(sentence):
+    feature_values = collections.Counter(sentence)
+    sentance_length = len(sentence)
+    for item in feature_values:
+            feature_values[item] = feature_values[item] / float(sentance_length)
+    return feature_values
 
 
 
-def classification_score_general(feature_values, weights):
+def classification_score_general(feature_values, feature_weights):
     # features dict = featurename:normalizedfeatureValue
     # weight dict = featurename -> weight val
     score = 0
     for feature_value in feature_values:
-        score += feature_value * weights[feature_value]
+        score += feature_value * feature_weights[feature_value]
     return score
 
 def classification_score(sentence, weights):
