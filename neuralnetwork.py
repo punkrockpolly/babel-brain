@@ -14,7 +14,7 @@ def isFile(filename):
 def dict_to_json(my_dict):
     return json.dumps(my_dict)
 
-     
+
 def json_to_dict(my_json):
     return json.loads(my_json)
 
@@ -77,6 +77,7 @@ def sentences(filename):
     print str(num_removed) + ":" + filename
     return new_list
 
+
 def normalized_char_frequencies(string_input):
     return 0
 
@@ -96,38 +97,12 @@ def extract_features(string_input):
     charfreq = normalized_char_frequencies(string_input)
     avg_sentance_len = avg_sentance_len(string_input)
     avg_word_len = avg_word_len(string_input)
-    features = dict() 
+    features = dict()
     
     features['word_len'] = avg_word_len
     features['sent_len'] = avg_sentance_len
     features['char_freq'] = 0
     return features
-'''
-
-
-def sentence_to_normailized_frequency_values_dict(sentence):
-    feature_values = collections.Counter(sentence)
-    sentance_length = len(sentence)
-    for item in feature_values:
-            feature_values[item] = feature_values[item] / float(sentance_length)
-    return feature_values
-
-
-def classification_score_general(feature_values, feature_weights):
-    # features dict = featurename:normalizedfeatureValue
-    # weight dict = featurename -> weight val
-    score = 0
-    for feature_value in feature_values:
-        score += feature_value * feature_weights[feature_value]
-    return score
-
-
-def classification_score(sentence, weights):
-    # input sentence and weights, mutiply then return score
-    score = 0
-    for letter in string.ascii_lowercase:
-            score += sentence.count(letter) * weights[letter]
-    return sentence_length_normalized_score(sentence, score)
 
 
 def sentence_length_normalized_score(sentence, score):
@@ -144,8 +119,41 @@ def sentence_length_normalized_score(sentence, score):
         return 0
 
 
-def guess_is_english(sentence, weights, threshold=50):
-    score = classification_score(sentence, weights)
+'''
+
+
+def sentence_to_normailized_frequency_values_dict(sentence):
+    # takes a sentence and returns dictionary
+    feature_values = collections.Counter(sentence)
+    sentance_length = len(sentence)
+    for item in feature_values:
+        feature_values[item] = feature_values[item] / float(sentance_length)
+    return feature_values
+
+
+def classification_score(feature_values, feature_weights):
+    # features values = featurename -> normalizedfeatureValue
+    # feature weights  = featurename -> feature weight
+    score = 0
+    for this_feature_value in feature_values:
+        score += this_feature_value * feature_weights[this_feature_value]
+    return score
+
+
+def get_threshold():
+    return 50
+
+
+def guess_is_english(sentence):
+    # get feature weights
+    feature_weights = get_knowledge() 
+    # feature vals 
+    feature_values = sentence_to_normailized_frequency_values_dict(sentence)
+    # calc score 
+    score = classification_score(feature_values,feature_weights)
+    # get threshold
+    threshold = get_threshold 
+    # compare score to threshhold
     if score > threshold:
         #print "We think this is English", sentence
         return True
