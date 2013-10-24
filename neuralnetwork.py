@@ -1,5 +1,4 @@
 import string
-import random
 import json
 
 
@@ -10,20 +9,26 @@ def isFile(filename):
     except IOError:
         return False
 
+
 def dict_to_json(my_dict):
     return json.dumps(my_dict)
+
      
 def json_to_dict(my_json):
     return json.loads(my_json)
 
+
 def save_knowledge(knowledge_dict):
-    write_to_file(dict_to_json(knowledge_dict))
+    write_to_file('knowledge.txt', dict_to_json(knowledge_dict))
+
 
 def get_knowledge():
     if isFile('knowledge.txt'):
-        return json_to_dict(file_contents('knowledge.txt'))
+        return json_to_dict(get_file_contents('knowledge.txt'))
     else:
-        return def_feature_weights()
+        print "A NEW DICT WAS GENERATED."
+        return new_feature_weights()
+
 
 def write_to_file(filename, data):
     target = open(filename, 'w')
@@ -31,26 +36,26 @@ def write_to_file(filename, data):
     target.close
     return True
 
-def file_contents(filename):
+
+def get_file_contents(filename):
     txt = open(filename)
     text = txt.read()
     txt.close()
     return text
 
 
+def new_feature_weights():
+    # build dictionary of all features
+    feature_dict = {}
+    feature_dict = feat_init_letter_freq(feature_dict)
+    return feature_dict
 
-def isInCache(pLoc1,pLoc2):
-    filename = filenameGen(pLoc1,pLoc2)
-    return isFile(filename)
 
-
-def def_feature_weights():
-    # build dictionary of letters and their weights
-    letterDic = {}
+def feat_init_letter_freq(feature_dict):
+    # INIT ALL ASCII LETTER FREQS AT 1
     for letter in string.ascii_lowercase:
-        letterDic[letter] = 1
-    return letterDic
-
+        feature_dict[letter] = 1
+    return feature_dict
 
 
 def sentences(filename):
@@ -74,6 +79,7 @@ def sentences(filename):
 def normalized_char_frequencies(string_input):
     return 0
 
+'''
 def avg_word_len(string_input):
     words = string_input.count(' ')
     total_chars_in_words = len(string_input.strip(' '))
@@ -83,7 +89,6 @@ def avg_sentance_len(string_input):
     words = string_input.count('.')
     total_chars_in_sent = len(string_input.strip('.'))
     return total_chars_in_sent / float(words)
-
 
 
 def extract_features(string_input):
@@ -96,10 +101,12 @@ def extract_features(string_input):
     features['sent_len'] = avg_sentance_len
     features['char_freq'] = 0
     return features
+'''
 
 
 
-def classification_score_general(feature_values,weights):
+
+def classification_score_general(feature_values, weights):
     # features dict = featurename:normalizedfeatureValue
     # weight dict = featurename -> weight val
     score = 0
@@ -140,7 +147,7 @@ class CharWeights(object):
     def __init__(self):
         self.english_correct = 0
         self.spanish_correct = 0
-        self.weights = def_feature_weights()
+        self.weights = new_feature_weights()
         self.best_weights = self.weights
         self.english_sentences = sentences('english-sentences.txt')
         self.spanish_sentences = sentences('spanish-sentences.txt')
