@@ -1,5 +1,63 @@
 import string
-import random
+import json
+import collections
+
+
+def isFile(filename):
+    try:
+        with open(filename):
+            return True
+    except IOError:
+        return False
+
+
+def dict_to_json(my_dict):
+    return json.dumps(my_dict)
+
+
+def json_to_dict(my_json):
+    return json.loads(my_json)
+
+
+def save_knowledge(knowledge_dict):
+    write_to_file('knowledge.txt', dict_to_json(knowledge_dict))
+
+
+def get_knowledge():
+    if isFile('knowledge.txt'):
+        return json_to_dict(get_file_contents('knowledge.txt'))
+    else:
+        print "A NEW DICT WAS GENERATED."
+        return new_feature_weights()
+
+
+def write_to_file(filename, data):
+    target = open(filename, 'w')
+    target.write(str(data))
+    target.close
+    return True
+
+
+def get_file_contents(filename):
+    txt = open(filename)
+    text = txt.read()
+    txt.close()
+    return text
+
+
+def new_feature_weights():
+    # build dictionary of all features
+    feature_dict = {}
+    feature_dict = feat_init_letter_freq(feature_dict)
+    return feature_dict
+
+
+def feat_init_letter_freq(feature_dict):
+    # INIT ALL ASCII LETTER FREQS AT 1
+    for letter in string.ascii_lowercase:
+        feature_dict[letter] = 1
+    return feature_dict
+
 
 def sentences(filename):
     # builds list of sentences from input file, then strips empty lines
@@ -20,18 +78,10 @@ def sentences(filename):
     return new_list
 
 
-def extract_features(string_input):
-    charfreq = normalized_char_frequencies(string_input)
-    avg_sentance_len = avg_sentance_len(string_input)
-    avg_word_len = avg_word_len(string_input)
-    features = dict() 
-    
-    features['word_len'] = avg_word_len
-    features['sent_len'] = avg_sentance_len
-    features['char_freq'] = 0
-    return features
+def normalized_char_frequencies(string_input):
+    return 0
 
-
+'''
 def avg_word_len(string_input):
     words = string_input.count(' ')
     total_chars_in_words = len(string_input.strip(' '))
@@ -43,38 +93,16 @@ def avg_sentance_len(string_input):
     return total_chars_in_sent / float(words)
 
 
-def def_letter_weights():
-    # build dictionary of letters and their weights
-    letterDic = {}
-    for letter in string.ascii_lowercase:
-        letterDic[letter] = 1
-    return letterDic
-
-def random_weights():
-    # build dictionary of letters and their weights
-    letterDic = {}
-    for letter in string.ascii_lowercase:
-        letterDic[letter] = random.randint(-10, 10)
-    return letterDic
-
-
-def classification_score_general(feature_values,weights):
-
-    # features dict = featurename:normalizedfeatureValue
-    # weight dict = featurename -> weight val
-    score = 0
-    for feature_value in feature_values:
-        score += feature_value * weights[feature_value]
-    return score
-
-
-def classification_score(sentence, weights):
-    # input sentence and weights, mutiply then return score
-    score = 0
-    for letter in string.ascii_lowercase:
-            score += sentence.count(letter) * weights[letter]
-
-    return sentence_length_normalized_score(sentence, score)
+def extract_features(string_input):
+    charfreq = normalized_char_frequencies(string_input)
+    avg_sentance_len = avg_sentance_len(string_input)
+    avg_word_len = avg_word_len(string_input)
+    features = dict()
+    
+    features['word_len'] = avg_word_len
+    features['sent_len'] = avg_sentance_len
+    features['char_freq'] = 0
+    return features
 
 
 def sentence_length_normalized_score(sentence, score):
@@ -91,8 +119,41 @@ def sentence_length_normalized_score(sentence, score):
         return 0
 
 
-def guess_is_english(sentence, weights, threshold=50):
-    score = classification_score(sentence, weights)
+'''
+
+
+def sentence_to_normailized_frequency_values_dict(sentence):
+    # takes a sentence and returns dictionary
+    feature_values = collections.Counter(sentence)
+    sentance_length = len(sentence)
+    for item in feature_values:
+        feature_values[item] = feature_values[item] / float(sentance_length)
+    return feature_values
+
+
+def classification_score(feature_values, feature_weights):
+    # features values = featurename -> normalizedfeatureValue
+    # feature weights  = featurename -> feature weight
+    score = 0
+    for this_feature_value in feature_values:
+        score += this_feature_value * feature_weights[this_feature_value]
+    return score
+
+
+def get_threshold():
+    return 50
+
+
+def guess_is_english(sentence):
+    # get feature weights
+    feature_weights = get_knowledge() 
+    # feature vals 
+    feature_values = sentence_to_normailized_frequency_values_dict(sentence)
+    # calc score 
+    score = classification_score(feature_values,feature_weights)
+    # get threshold
+    threshold = get_threshold 
+    # compare score to threshhold
     if score > threshold:
         #print "We think this is English", sentence
         return True
@@ -105,7 +166,7 @@ class CharWeights(object):
     def __init__(self):
         self.english_correct = 0
         self.spanish_correct = 0
-        self.weights = def_letter_weights()
+        self.weights = new_feature_weights()
         self.best_weights = self.weights
         self.english_sentences = sentences('english-sentences.txt')
         self.spanish_sentences = sentences('spanish-sentences.txt')
