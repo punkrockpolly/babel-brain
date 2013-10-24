@@ -1,13 +1,10 @@
 import string
 import random
 
-
 def sentences(filename):
     # builds list of sentences from input file, then strips empty lines
-
     sentences = open(filename)
     rawinput = sentences.read().lower()
-
     input_list = rawinput.split("\n")
 
     num_removed = 0
@@ -23,28 +20,57 @@ def sentences(filename):
     return new_list
 
 
+def extract_features(string_input):
+    charfreq = normalized_char_frequencies(string_input)
+    avg_sentance_len = avg_sentance_len(string_input)
+    avg_word_len = avg_word_len(string_input)
+    features = dict() 
+    
+    features['word_len'] = avg_word_len
+    features['sent_len'] = avg_sentance_len
+    features['char_freq'] = 0
+    return features
+
+
+def avg_word_len(string_input):
+    words = string_input.count(' ')
+    total_chars_in_words = len(string_input.strip(' '))
+    return total_chars_in_words / float(words)
+
+def avg_sentance_len(string_input):
+    words = string_input.count('.')
+    total_chars_in_sent = len(string_input.strip('.'))
+    return total_chars_in_sent / float(words)
+
+
 def def_letter_weights():
     # build dictionary of letters and their weights
-
     letterDic = {}
     for letter in string.ascii_lowercase:
         letterDic[letter] = 1
     return letterDic
 
-
 def random_weights():
     # build dictionary of letters and their weights
-
     letterDic = {}
     for letter in string.ascii_lowercase:
         letterDic[letter] = random.randint(-10, 10)
     return letterDic
 
 
+def classification_score_general(feature_values,weights):
+
+    # features dict = featurename:normalizedfeatureValue
+    # weight dict = featurename -> weight val
+    score = 0
+    for feature_value in feature_values:
+        score += feature_value * weights[feature_value]
+    return score
+
+
 def classification_score(sentence, weights):
     # input sentence and weights, mutiply then return score
     score = 0
-
     for letter in string.ascii_lowercase:
             score += sentence.count(letter) * weights[letter]
 
@@ -65,20 +91,14 @@ def sentence_length_normalized_score(sentence, score):
         return 0
 
 
-def guess_is_english(sentence, weights):
-    threshold_high = 10
-    threshold_low = 0
-
+def guess_is_english(sentence, weights, threshold=50):
     score = classification_score(sentence, weights)
-    if score < threshold_high and score > threshold_low:
+    if score > threshold:
         #print "We think this is English", sentence
         return True
     else:
         #print "We think this is Spanish", sentence
         return False
-
-
-print sentence_length_normalized_score("a sent t ", 120)
 
 
 class CharWeights(object):
