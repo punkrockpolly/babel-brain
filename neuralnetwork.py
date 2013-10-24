@@ -104,13 +104,13 @@ def extract_features(string_input):
     return features
 '''
 
+
 def sentence_to_normailized_frequency_values_dict(sentence):
     feature_values = collections.Counter(sentence)
     sentance_length = len(sentence)
     for item in feature_values:
             feature_values[item] = feature_values[item] / float(sentance_length)
     return feature_values
-
 
 
 def classification_score_general(feature_values, feature_weights):
@@ -121,12 +121,14 @@ def classification_score_general(feature_values, feature_weights):
         score += feature_value * feature_weights[feature_value]
     return score
 
+
 def classification_score(sentence, weights):
     # input sentence and weights, mutiply then return score
     score = 0
     for letter in string.ascii_lowercase:
             score += sentence.count(letter) * weights[letter]
     return sentence_length_normalized_score(sentence, score)
+
 
 def sentence_length_normalized_score(sentence, score):
     # returns a score that immune to sentence length,
@@ -141,6 +143,7 @@ def sentence_length_normalized_score(sentence, score):
         # become more sophisticated.
         return 0
 
+
 def guess_is_english(sentence, weights, threshold=50):
     score = classification_score(sentence, weights)
     if score > threshold:
@@ -149,6 +152,7 @@ def guess_is_english(sentence, weights, threshold=50):
     else:
         #print "We think this is Spanish", sentence
         return False
+
 
 class CharWeights(object):
     def __init__(self):
