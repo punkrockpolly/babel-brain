@@ -225,3 +225,7 @@ print Language_Bot
 Language_Bot.train()
 print Language_Bot
 print Language_Bot.best_weights
+
+userinput = raw_input("Do you want to save new weights data: y/n ")
+if userinput == 'y':
+    save_knowledge(Language_Bot.best_weights)
