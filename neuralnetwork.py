@@ -181,6 +181,16 @@ class LanguageBot(object):
                 self.spanish_correct += 1
         return self.spanish_correct
 
+    def guess_sentence(self, sentence, language):
+    # checks guess
+        if guess_is_english(sentence):
+            if language == 'english':
+                return True
+        else:
+            if language == 'spanish':
+                return True
+        return False
+
     def train(self):
         for letter in string.ascii_lowercase:
             for x in range(-5, 6):
