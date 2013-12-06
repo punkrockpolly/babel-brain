@@ -1,129 +1,7 @@
 import string
-import json
-import collections
-
-
-def isFile(filename):
-    try:
-        with open(filename):
-            return True
-    except IOError:
-        return False
-
-
-def dict_to_json(my_dict):
-    return json.dumps(my_dict)
-
-
-def json_to_dict(my_json):
-    return json.loads(my_json)
-
-
-def save_knowledge(knowledge_dict):
-    write_to_file('knowledge.txt', dict_to_json(knowledge_dict))
-
-
-def get_knowledge():
-    if isFile('knowledge.txt'):
-        return json_to_dict(get_file_contents('knowledge.txt'))
-    else:
-        print "A NEW DICT WAS GENERATED."
-        return new_feature_weights()
-
-
-def write_to_file(filename, data):
-    target = open(filename, 'w')
-    target.write(str(data))
-    target.close
-    return True
-
-
-def get_file_contents(filename):
-    txt = open(filename)
-    text = txt.read()
-    txt.close()
-    return text
-
-
-def new_feature_weights():
-    # build dictionary of all features
-    feature_dict = {}
-    feature_dict = feat_init_letter_freq(feature_dict)
-    save_knowledge(feature_dict)
-    return feature_dict
-
-
-def feat_init_letter_freq(feature_dict):
-    # INIT ALL ASCII LETTER FREQS AT 1
-    for letter in string.ascii_lowercase:
-        feature_dict[letter] = 1
-    return feature_dict
-
-
-def sentences(filename):
-    # builds list of sentences from input file, then strips empty lines
-    sentences = open(filename)
-    rawinput = sentences.read().lower()
-    input_list = rawinput.split("\n")
-    new_list = []
-    for sentence in input_list:
-        stripped = sentence.strip()
-        if stripped != "":
-            new_list.append(stripped)
-    return new_list
-
-
-def normalized_char_frequencies(string_input):
-    return 0
-
-'''
-def avg_word_len(string_input):
-    words = string_input.count(' ')
-    total_chars_in_words = len(string_input.strip(' '))
-    return total_chars_in_words / float(words)
-
-def avg_sentance_len(string_input):
-    words = string_input.count('.')
-    total_chars_in_sent = len(string_input.strip('.'))
-    return total_chars_in_sent / float(words)
-
-
-def extract_features(string_input):
-    charfreq = normalized_char_frequencies(string_input)
-    avg_sentance_len = avg_sentance_len(string_input)
-    avg_word_len = avg_word_len(string_input)
-    features = dict()
-
-    features['word_len'] = avg_word_len
-    features['sent_len'] = avg_sentance_len
-    features['char_freq'] = 0
-    return features
-
-
-def sentence_length_normalized_score(sentence, score):
-    # returns a score that immune to sentence length,
-    # thereby highlighing only the results of freq analysis
-    total_valid_chars = 0
-    for letter in string.ascii_lowercase:
-            total_valid_chars += sentence.count(letter)
-    if total_valid_chars != 0:
-        return (float(score)/total_valid_chars)
-    else:
-        # this will have to change in the future as the thresholds
-        # become more sophisticated.
-        return 0
-
-
-'''
-
-
-def sentence_to_normailized_frequency_values_dict(sentence):
-    # takes a sentence and returns dictionary
-    feature_values = collections.Counter(sentence)
-    sentance_length = len(sentence)
-    for item in feature_values:
-        feature_values[item] = feature_values[item] / float(sentance_length)
-    return feature_values
+import fitness
+import datamodel
+import persistance
 
 
 def classification_score(feature_values, feature_weights):
@@ -133,7 +11,6 @@ def classification_score(feature_values, feature_weights):
     for this_feature_weight in feature_weights:
         score += feature_values[this_feature_weight] * feature_weights[this_feature_weight]
     return score
-
 
 def get_threshold():
     return 50
