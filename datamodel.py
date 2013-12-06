@@ -5,25 +5,21 @@ import persistence
 ## DATA MODEL
 
 
+def dict_to_vector(feature_dict):
+    return map(lambda feature: feature_dict[feature], feature_dict)
+        # list comprehension: [feature_dict[x] for x in keys in feature_dict
+
+
 def test_dict_to_vector():
     dictionary = {}
-    dictionary[1] = 1"TEST 1"
-    dictionary[2] = "sdfshdj"
-    dictionary[3] = "TEST PASSED"
-    print dict_to_vector(dictionary)
+    dictionary[1] = 11
+    dictionary[2] = 22
+    dictionary[3] = 33
+    dictionary[4] = 44
+    print("TEST PASSED")
+    return dict_to_vector(dictionary)
 
-
-def dict_to_vector(feature_dict):
-    return map(lambda feature:feature_dict[feature], feature_dict)
-
-
-test_dict_to_vector()
-
-
-# [feature_dict[x] for x in keys in feature_dict]
-
-
-
+# print(test_dict_to_vector())
 
 
 def new_feature_weights():
@@ -45,12 +41,11 @@ def normalized_char_frequencies(string_input):
     return 0
 
 
-
-
 def avg_word_len(string_input):
     words = string_input.count(' ')
     total_chars_in_words = len(string_input.strip(' '))
     return total_chars_in_words / float(words)
+
 
 def avg_sentance_len(string_input):
     words = string_input.count('.')
@@ -59,14 +54,13 @@ def avg_sentance_len(string_input):
 
 
 def extract_features(string_input):
-    charfreq = normalized_char_frequencies(string_input)
-    avg_sentance_len = avg_sentance_len(string_input)
-    avg_word_len = avg_word_len(string_input)
-    features = dict()
-
-    features['word_len'] = avg_word_len
-    features['sent_len'] = avg_sentance_len
-    features['char_freq'] = 0
+    freqs = normalized_char_frequencies(string_input)
+    words = avg_sentance_len(string_input)
+    chars = avg_word_len(string_input)
+    features = {}
+    features['word_len'] = chars
+    features['sent_len'] = words
+    features['char_freq'] = freqs
     return features
 
 
@@ -77,13 +71,11 @@ def sentence_length_normalized_score(sentence, score):
     for letter in string.ascii_lowercase:
             total_valid_chars += sentence.count(letter)
     if total_valid_chars != 0:
-        return (float(score)/total_valid_chars)
+        return (float(score) / total_valid_chars)
     else:
         # this will have to change in the future as the thresholds
         # become more sophisticated.
         return 0
-
-
 
 
 def sentence_to_normailized_frequency_values_dict(sentence):

@@ -1,6 +1,5 @@
 import string
 import fitness
-import datamodel
 import persistance
 
 
@@ -12,13 +11,14 @@ def classification_score(feature_values, feature_weights):
         score += feature_values[this_feature_weight] * feature_weights[this_feature_weight]
     return score
 
+
 def get_threshold():
     return 50
 
 
 def guess_is_english(sentence):
     # get feature weights
-    feature_weights = get_knowledge()
+    feature_weights = persistance.get_knowledge()
     # feature vals
     feature_values = sentence_to_normailized_frequency_values_dict(sentence)
     # calc score
@@ -27,10 +27,10 @@ def guess_is_english(sentence):
     threshold = get_threshold
     # compare score to threshhold
     if score > threshold:
-        #print "We think this is English", sentence
+        #print("We think this is English", sentence)
         return True
     else:
-        #print "We think this is Spanish", sentence
+        #print("We think this is Spanish", sentence)
         return False
 
 
@@ -38,7 +38,7 @@ class LanguageBot(object):
     def __init__(self):
         self.english_correct = 0
         self.spanish_correct = 0
-        self.feature_weights = get_knowledge()
+        self.feature_weights = persistance.get_knowledge()
         self.best_weights = self.feature_weights
         self.english_sentences = sentences('english-sentences.txt')
         self.spanish_sentences = sentences('spanish-sentences.txt')
@@ -97,12 +97,12 @@ class LanguageBot(object):
 #     languageBot.showWeghts()
 
 Language_Bot = LanguageBot()
-print Language_Bot.best_weights
-print Language_Bot
+print(Language_Bot.best_weights)
+print(Language_Bot)
 Language_Bot.train()
-print Language_Bot
-print Language_Bot.best_weights
+print(Language_Bot)
+print(Language_Bot.best_weights)
 
 userinput = raw_input("Do you want to save new weights data: y/n ")
 if userinput == 'y':
-    save_knowledge(Language_Bot.best_weights)
+    persistance.save_knowledge(Language_Bot.best_weights)

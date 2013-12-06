@@ -1,4 +1,6 @@
 import json
+import datamodel
+
 
 # PERSISTANCE.py
 def isFile(filename):
@@ -25,8 +27,8 @@ def get_knowledge():
     if isFile('knowledge.txt'):
         return json_to_dict(get_file_contents('knowledge.txt'))
     else:
-        print "A NEW DICT WAS GENERATED."
-        return new_feature_weights()
+        print("A NEW DICT WAS GENERATED.")
+        return datamodel.new_feature_weights()
 
 
 def write_to_file(filename, data):
@@ -43,7 +45,6 @@ def get_file_contents(filename):
     return text
 
 
-
 def sentences(filename):
     # builds list of sentences from input file, then strips empty lines
     sentences = open(filename)
@@ -58,19 +59,19 @@ def sentences(filename):
 
 
 def testWrite(my_dict):
-    # 
     assert write_to_file('test.txt', dict_to_json(my_dict))
-
+    print("write test success")
 
 
 def testRead(filename):
     if isFile(filename):
         assert json_to_dict(get_file_contents(filename))
-    
-dictionary = {}
-dictionary[1] = "jfhdj"
-dictionary[2] = "sdfshdj"
-dictionary[3] = "TEST PASSED"
+        print("read test success")
 
-testWrite(dictionary)
-testRead('test.txt')
+test_dict = {}
+test_dict[1] = "test case2"
+test_dict[2] = "true"
+test_dict[3] = "TEST PASSED"
+
+# testWrite(test_dict)
+# testRead('test.txt')
