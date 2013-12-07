@@ -1,6 +1,6 @@
 import string
 import collections
-import persistence
+# import persistence
 
 ## DATA MODEL
 
@@ -26,7 +26,7 @@ def new_feature_weights():
     # build dictionary of all features
     feature_dict = {}
     feature_dict = feat_init_letter_freq(feature_dict)
-    persistence.save_knowledge(feature_dict)
+    # persistence.save_knowledge(feature_dict)
     return feature_dict
 
 
