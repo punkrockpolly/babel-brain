@@ -2,7 +2,6 @@ import json
 import datamodel
 
 
-# PERSISTANCE.py
 def isFile(filename):
     try:
         with open(filename):
@@ -28,7 +27,9 @@ def get_knowledge():
         return json_to_dict(get_file_contents('knowledge.txt'))
     else:
         print("A NEW DICT WAS GENERATED.")
-        return datamodel.new_feature_weights()
+        feature_dict = datamodel.new_feature_weights()
+        save_knowledge(feature_dict)
+        return feature_dict
 
 
 def write_to_file(filename, data):
