@@ -22,20 +22,26 @@ def dict_to_vector(feature_dict):
         # list comprehension: [feature_dict[x] for x in keys in feature_dict
 
 
-def rand_init_feature_weights(L_in, L_out):
-    # build a new dictionary
+# def vect_to_dict(feature_dict={}, feature_vector):
+#     for each k:v, assign
+
+
+def rand_init_ft_weights(L_in, L_out, epsilon_init=0.12):
+    # build a new 2-d array for Thetas: neural network layers
+
     # randomly initialize all features weights of a layer
     # with L_in incoming connections and L_out outgoing connections
     W = numpy.zeros(shape=(L_out, 1 + L_in))
 
     # randomly initialize the weights to small values
-    epsilon_init = 0.12
     W = numpy.random.rand(L_out, 1 + L_in) * 2 * epsilon_init - epsilon_init
 
     return W
 
 
-def normalize_values_dict(feature_vector):
+# Refactor to fix normalize_values_dict - DOES NOT WORK
+def normalize_values_dict(feature_dict):
+    feature_vector = dict_to_vector(feature_dict)
     # returns a normalized version of X where the mean value of
     # each feature is 0 and the standard deviation is 1
     X_norm = feature_vector
@@ -96,23 +102,30 @@ def sentence_length_normalized_score(sentence, score):
         return 0
 
 
-def test_dict_to_vector():
-    dictionary = {}
-    dictionary[1] = 11
-    dictionary[2] = 22
-    dictionary[3] = 33
-    dictionary[4] = 44
-    print("TEST PASSED")
-    return dict_to_vector(dictionary)
-
-# TEST CASES - prints need to be refactored into unit test methods
-# print(test_dict_to_vector())
-# print(dict_to_vector(init_feature_weights()))
-# print(rand_init_feature_weights(2, 3))
-s = "test string number 2"
+def test_dict_to_vector(d):
+    print("Test passed: test_dict_to_vector")
+    return dict_to_vector(d)
 
 
 def test_extract_features(s):
-    print("'{0}' contains the following features: {1}".format(
-          s, extract_features(s)))
-    print(dict_to_vector(extract_features(s)))
+    print("\n'{0}' contains the following features: \n{1} \nvector representation: {2}"
+          .format(s, extract_features(s), dict_to_vector(extract_features(s))))
+    print("\nnumber of features: {0}\n".format(len(dict_to_vector(extract_features(s)))))
+
+
+def test_ft_rand_init(rows=2, cols=3):
+    print("Test passed: ft_rand_init")
+    return rand_init_ft_weights(rows, cols)
+
+
+d = {}
+d[1] = 11
+d[2] = 22
+d[3] = 33
+d[4] = 44
+
+# d2 = test_ft_rand_init(2, 50)
+
+s = "test string number 234534"
+# test_dict_to_vector(d)
+# test_extract_features(s)
