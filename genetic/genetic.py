@@ -147,8 +147,8 @@ def mainLoop(pGenes, pGenerationNum):
     for thisGene in genes:
         geneFitness[thisGene] = theFitnessOf(thisGene)
         generationFitness += geneFitness[thisGene]
-        print("     {0}                        {1}".format(
-              thisGene, geneFitness[thisGene]))
+        # print("     {0}                        {1}".format(
+        #       thisGene, geneFitness[thisGene]))
 
     ## DETERMINE GENERATIONAL AVERAGE AND PRINT
     avgGenFitness = float(generationFitness) / generationSize
@@ -170,7 +170,7 @@ def mainLoop(pGenes, pGenerationNum):
 
     ## INIT EMPTY OFFSPRING LIST
     offspring = []
-    print()
+    print('')
 
     ## PRODUCE REPORT ON
     # for thisGene in genes:
@@ -197,7 +197,7 @@ def mainLoop(pGenes, pGenerationNum):
 # http://stackoverflow.com/questions/952914/making-a-flat-list-out-of-list-of-lists-in-python
 
     offspring = [item for sublist in offspring for item in sublist]
-    print()
+    print('')
     print("NUM DIED: {0}".format(test1 - test2))
     print("GENERATION # {0} :".format(pGenerationNum))
     print("NUM KIDS: {0}".format(len(offspring)))
