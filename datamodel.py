@@ -109,7 +109,10 @@ def test_dict_to_vector():
 # print(test_dict_to_vector())
 # print(dict_to_vector(init_feature_weights()))
 # print(rand_init_feature_weights(2, 3))
-t = "test string number 2"
-print("'{0}' contains the following features: {1}".format(
-      t, extract_features(t)))
-print(dict_to_vector(extract_features(t)))
+s = "test string number 2"
+
+
+def test_extract_features(s):
+    print("'{0}' contains the following features: {1}".format(
+          s, extract_features(s)))
+    print(dict_to_vector(extract_features(s)))
