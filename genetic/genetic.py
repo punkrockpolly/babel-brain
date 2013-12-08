@@ -127,7 +127,7 @@ def mainLoop(pGenes, pGenerationNum):
     numchildren = 6
 
     if pGenes is None:
-        print "A NEW GENERATION WAS STARTED"
+        print("A NEW GENERATION WAS STARTED")
         ##CONSTANTS
         generationSize = 2000
         pGenerationNum = 1
@@ -148,20 +148,20 @@ def mainLoop(pGenes, pGenerationNum):
         geneFitness[thisGene] = theFitnessOf(thisGene)
         generationFitness += geneFitness[thisGene]
         print("     {0}                        {1}".format(
-              thisGene, str(geneFitness[thisGene])))
+              thisGene, geneFitness[thisGene]))
 
     ## DETERMINE GENERATIONAL AVERAGE AND PRINT
     avgGenFitness = float(generationFitness) / generationSize
-    print "AVG GENERATION FITNESS: " + str(avgGenFitness)
+    print("AVG GENERATION FITNESS: {0}".format(avgGenFitness))
 
     ## KILL GENES THAT DID NOT PERFORM ABOVE AVERAGE
     ## PRODUCE REPORT FOR DEATHS AND REPRODUCTION
     test1 = len(geneFitness.keys())
-    print "WHAT HAPPENED... GENERATION # " + str(pGenerationNum) + " :"
+    print("WHAT HAPPENED... GENERATION # {0} :".format(pGenerationNum))
     for thisGene in geneFitness.keys():
         if geneFitness[thisGene] >= avgGenFitness:
             print("DIED W/O REPRODUCING:    {0}                       {1}"
-                  .format(thisGene, str(geneFitness[thisGene])))
+                  .format(thisGene, geneFitness[thisGene]))
             del geneFitness[thisGene]
 
     # ASSIGN SURVIVING GENES TO THE MAIN GENES LIST
@@ -170,22 +170,22 @@ def mainLoop(pGenes, pGenerationNum):
 
     ## INIT EMPTY OFFSPRING LIST
     offspring = []
-    print
+    print()
 
     ## PRODUCE REPORT ON
     # for thisGene in genes:
-    #   print "REPRODUCED: " + thisGene + " " + str(geneFitness[thisGene])
+    #   print("REPRODUCED:  {0} {1}".format(thisGene, geneFitness[thisGene]))
 
     ## CHOOSE MATES (FIRST AND LAST ITEMS IN LIST) PRODUCE OFFSPRING AND REPORT
 
     while len(genes) >= 2:
-        # print "==FAMILY=="
-        # print "PARENT1: " + genes[0] + "  " + str(geneFitness[genes[0]])
-        # print "PARENT2: " + genes[-1] + " " + str(geneFitness[genes[-1]])
+        # print("==FAMILY==")
+        # print("PARENT1: {0}  {1}".format(genes[0], geneFitness[genes[0]]))
+        # print("PARENT2: {0}  {1}".format(genes[-1], geneFitness[genes[-1]]))
         newOffspring = theOffspringOf(genes[-1], genes[0], numchildren)
         offspring.append(newOffspring)
-        # print "OFFSPRING: " + str(newOffspring)
-        # print "====="
+        # print("OFFSPRING: {0}".format(newOffspring))
+        # print("=====")
 
         # get rid of first and last itmes
         # now that they have reporduced, they die. their children live on.
@@ -193,14 +193,15 @@ def mainLoop(pGenes, pGenerationNum):
         genes.pop(-1)
 
     # FORMAT THE OFFSPRING LIST
-    # flattens the weirdly nested list of offspring http://stackoverflow.com/questions/952914/making-a-flat-list-out-of-list-of-lists-in-python
+    # flattens the weirdly nested list of offspring
+# http://stackoverflow.com/questions/952914/making-a-flat-list-out-of-list-of-lists-in-python
 
     offspring = [item for sublist in offspring for item in sublist]
-    print
-    print "NUM DIED: " + str(test1 - test2)
-    print "GENERATION # " + str(pGenerationNum) + " :"
-    print "NUM KIDS: " + str(len(offspring))
-    print "AVG PARENTS' GENERATION FITNESS: " + str(avgGenFitness)
+    print()
+    print("NUM DIED: {0}".format(test1 - test2))
+    print("GENERATION # {0} :".format(pGenerationNum))
+    print("NUM KIDS: {0}".format(len(offspring)))
+    print("AVG PARENTS' GENERATION FITNESS: {0}".format(avgGenFitness))
 
     ## SINCE THE OFFSPRING IS THE NEW GENERATION, THEY BECOME THE genes LIST:
     pGenerationNum += 1
@@ -213,5 +214,5 @@ def mainLoop(pGenes, pGenerationNum):
         mainLoop(offspring, pGenerationNum)
 
 
-#print theFitnessOf("HACKER SCTTTR")
+#print(theFitnessOf("HACKER SCTTTR"))
 mainLoop(None, None)
