@@ -3,6 +3,36 @@ import persistence
 import datamodel
 
 
+def sigmoid(z):
+# g = SIGMOIDGRADIENT(z) computes the gradient of the sigmoid function
+# evaluated at z. This should work regardless if z is a matrix or a
+# vector. In particular, if z is a vector or matrix, you should return
+# the gradient for each element.
+    g = numpy.zeros(size(z))
+    gz = 1.0 ./ (1.0 + exp(-z))
+    g = (gz .* (1.0 - gz))
+
+
+def predict(Theta1, Theta2, X):
+# refactor from octave into python:
+
+# function p = predict(Theta1, Theta2, X)
+# PREDICT Predict the label of an input given a trained neural network
+#    p = PREDICT(Theta1, Theta2, X) outputs the predicted label of X given
+#    the trained weights of a neural network (Theta1, Theta2)
+
+# Useful values
+# m = size(X, 1);
+# num_labels = size(Theta2, 1);
+
+# p = zeros(size(X, 1), 1);
+
+# h1 = sigmoid([ones(m, 1) X] * Theta1');
+# h2 = sigmoid([ones(m, 1) h1] * Theta2');
+# [dummy, p] = max(h2, [], 2);
+    return
+
+
 def classification_score(ft_values, ft_weights):
     # features values = featurename -> normalizedfeatureValue
     # feature weights  = featurename -> feature weight
@@ -51,13 +81,21 @@ def guess_is_english(sentence):
 # Its input nodes are the ones with no arcs to them, and its output nodes
 # have no arcs away from them. All other nodes are hidden nodes.
 
+# Setup some useful variables
+m = size(X, 1)
 J = 0
-Theta1 = 0
+
+# Reshape nn_params back into the parameters Theta1 and Theta2, 
+# the weight matrices for this 2 layer neural network
+
+Theta1 = 0 # todo: need to initialize/set weights to actual values
 Theta2 = 0
 
 Theta1_grad = numpy.zeros(Theta1)
 Theta2_grad = numpy.zeros(Theta2)
 
+
+def feed_forward(Theta1, Theta2, X):
 # Part 1: Forward propagation for the hypothesis
 #         Feedforward the neural network and
 #         return the cost in the variable J.
@@ -77,14 +115,20 @@ Theta2_grad = numpy.zeros(Theta2)
 # A3 = numpy.sigmoid(Z3)
 
 
-# --------------------------------------
-# Implement genetic.py to mutate Thetas
-# --------------------------------------
+def cost_function(nn_params,
+                  nput_layer_size,
+                  hidden_layer_size,
+                  num_labels,
+                  X, y, lambda):
 
-
-# --------------------------------------
-# Cost Function
-# --------------------------------------
+# nn_params need to be converted back into the weight matrices
+# parameters for Theta1 and Theta2: weight matrices for a 2 layer NN
+# input_layer_size: used to reshape Thetas
+# hidden_layer_size: used to reshape Thetas
+# num_labels: number of classifiers: used to reshape Thetas
+# X: input matrix
+# y: result vector
+# lambda: regularization value
 
 # y(i)k : i-th row of the y column vector,
 # converted to a 10 vector representation of the digit
@@ -97,3 +141,7 @@ Theta2_grad = numpy.zeros(Theta2)
 #     y_matrix(:, inum) = numpy.eye(num_labels)(:, y(inum, :))`
 
 # J = sum(sum(-y_matrix .* log(A3`) - (1 - y_matrix) .* log(1 - A3`)) / m) + reg_term
+
+# --------------------------------------
+# Implement genetic.py to mutate Thetas
+# --------------------------------------
