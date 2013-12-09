@@ -17,6 +17,10 @@ import fitness
 
 class Bot(object):
     def __init__(self):
+        self.input_layer_size = 50
+        hidden_layer_size = 25
+        num_labels = 2
+
         self.sentences = {}
         self.english_sentences = persistence.sentences('english-sentences.txt')
         self.spanish_sentences = persistence.sentences('spanish-sentences.txt')
@@ -41,6 +45,7 @@ class Bot(object):
                 self.spanish_correct += 1
         return self.spanish_correct
 
+    # refactor to guess via fitness.predict
     def guess_sentence(self, sentence, language):
     # checks guess
         if fitness.guess_is_english(sentence):
