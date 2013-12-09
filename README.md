@@ -34,3 +34,11 @@ datamodel
 persistence
 - read/write file
 - create json
+
+features - data points for each training example phrase
+-------------
+- num of words
+- average word length
+- frequency of letters: occurance frequency for each char in the ascii alphabet
+
+
