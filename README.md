@@ -7,7 +7,7 @@ WIP: implement a genetric algorithm for machine learning optimization
 - Learns from 2 input files (one english, one spanish)
 - Uses letter-weighting to guess the language of an input sentence.
 
-program flow
+program flow: file contents
 -------------
 main.py 
 - creates an instance of the babelbrain.Bot object
@@ -26,12 +26,12 @@ genetic.py
 - genetic algo
 - needs to be integrated with this project
 
-datamodel
+datamodel.py
 - feature extraction
 - random init for weights
 - normalization
 
-persistence
+persistence.py
 - read/write file
 - create json
 
