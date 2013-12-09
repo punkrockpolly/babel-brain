@@ -3,15 +3,6 @@ import persistence
 import fitness
 
 
-# inputs:
-# nn_params: parameters for Theta1 and Theta2: weight matrices for a 2 layer NN
-# input_layer_size: used to reshape Thetas
-# hidden_layer_size: used to reshape Thetas
-# num_labels: number of classifiers: used to reshape Thetas
-# X: input matrix
-# y: result vector
-# lambda: regularization value
-
 # Neural Network's five components:
 # 1. A directed graph (network topology) whose arcs we refer to as links.
 # 2. A state variable associated with each node, stored in layers.
@@ -59,24 +50,6 @@ class Bot(object):
             if language == 'spanish':
                 return True
         return False
-
-    def predict(Theta1, Theta2, X):
-    # function p = predict(Theta1, Theta2, X)
-    # PREDICT Predict the label of an input given a trained neural network
-    #    p = PREDICT(Theta1, Theta2, X) outputs the predicted label of X given
-    #    the trained weights of a neural network (Theta1, Theta2)
-
-    # Useful values
-    # m = size(X, 1);
-    # num_labels = size(Theta2, 1);
-
-    # You need to return the following variables correctly
-    # p = zeros(size(X, 1), 1);
-
-    # h1 = sigmoid([ones(m, 1) X] * Theta1');
-    # h2 = sigmoid([ones(m, 1) h1] * Theta2');
-    # [dummy, p] = max(h2, [], 2);
-        return
 
     # refactor to train via fitness.py
     def train(self):
