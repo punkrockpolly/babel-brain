@@ -85,10 +85,10 @@ def guess_is_english(sentence):
 m = size(X, 1)
 J = 0
 
-# Reshape nn_params back into the parameters Theta1 and Theta2, 
+# Reshape nn_params back into the parameters Theta1 and Theta2,
 # the weight matrices for this 2 layer neural network
 
-Theta1 = 0 # todo: need to initialize/set weights to actual values
+Theta1 = 0  # todo: need to initialize/set weights to actual values
 Theta2 = 0
 
 Theta1_grad = numpy.zeros(Theta1)
@@ -113,6 +113,7 @@ def feed_forward(Theta1, Theta2, X):
 # # Output Layer (hypothesis = A3)
 # Z3 = A2 * Theta2`
 # A3 = numpy.sigmoid(Z3)
+    end
 
 
 def cost_function(nn_params,

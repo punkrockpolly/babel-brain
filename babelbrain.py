@@ -18,8 +18,8 @@ import fitness
 class Bot(object):
     def __init__(self):
         self.input_layer_size = 50
-        hidden_layer_size = 25
-        num_labels = 2
+        self.hidden_layer_size = 25
+        self.num_labels = 2
 
         self.sentences = {}
         self.english_sentences = persistence.sentences('english-sentences.txt')
