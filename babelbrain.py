@@ -25,6 +25,8 @@ class Bot(object):
         self.hidden_layer_size = 5
         # current number of output classifiers
         self.num_labels = 1
+        # initialize correct
+        self.correct = 0
         # generates training examples
         self.english_sentences = datamodel.sentences('english-sentences.txt')
         self.spanish_sentences = datamodel.sentences('spanish-sentences.txt')
@@ -41,32 +43,35 @@ class Bot(object):
         self.Theta2 = (datamodel.rand_init_ft_weights(
                        self.hidden_layer_size,
                        self.num_labels))
-        nn_params = datamodel.unroll(self.Theta1) + datamodel.unroll(self.Theta2)
+        self.nn_params = datamodel.unroll(self.Theta1) + datamodel.unroll(self.Theta2)
         # imports saved feature weights
-        # self.feature_weights = persistence.get_knowledge()
+        # self.nn_params = persistence.get_knowledge()
 
     # refactor to train via fitness.py
     def train(self):
         print('\nTraining')
-        fitness.feed_forward(self.Theta1, self.Theta2, self.Ft_values)
+        print(fitness.cost_function(self.nn_params,
+                                    self.input_layer_size,
+                                    self.hidden_layer_size,
+                                    self.num_labels,
+                                    self.Ft_values,
+                                    self.y))
 
-        for letter in string.ascii_lowercase:
-            for x in range(-5, 6):
-                sys.stdout.write('.')
-                sys.stdout.flush()
-                self.feature_weights[letter] = x
-                self.new_score = (self.english_guesses_correct() +
-                                  self.spanish_guesses_correct())
-                if self.new_score > self.best_score:
-                    self.best_score = self.new_score
-                    self.best_weights[letter] = x
-        return self.best_weights
+        # for letter in string.ascii_lowercase:
+        #     for x in range(-5, 6):
+        #         sys.stdout.write('.')
+        #         sys.stdout.flush()
+        #         self.feature_weights[letter] = x
+        #         self.new_score = (self.english_guesses_correct() +
+        #                           self.spanish_guesses_correct())
+        #         if self.new_score > self.best_score:
+        #             self.best_score = self.new_score
+        #             self.best_weights[letter] = x
+        # return self.best_weights
 
     def __str__(self):
         output_string = '\n=====\n'
-        output_string += 'total english: \n' + str(len(self.english_sentences)) + ''
-        output_string += 'english correct:' + str(self.english_correct) + '\n'
+        output_string += 'total english:' + str(len(self.english_sentences)) + ' \n'
         output_string += 'total spanish:' + str(len(self.spanish_sentences)) + '\n'
-        output_string += 'spanish correct:' + str(self.spanish_correct) + '\n'
-        output_string += 'total correct:' + str(self.english_correct + self.spanish_correct)
+        output_string += 'total correct:' + str(self.correct) + '\n'
         return output_string

@@ -13,12 +13,12 @@ bot = babelbrain.Bot()
 # # now we have optimal weight
 #     bot.showWeights()
 
-print(bot.best_weights)
+print(bot.nn_params)
 print(bot)
 bot.train()
 print(bot)
-print(bot.best_weights)
+print(bot.nn_params)
 
 userinput = raw_input("Do you want to save new weights data: y/n ")
 if userinput == 'y':
-    persistence.save_knowledge(bot.best_weights)
+    persistence.save_knowledge(bot.nn_params)

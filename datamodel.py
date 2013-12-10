@@ -1,6 +1,6 @@
 import string
 import collections
-import numpy
+import numpy as np
 
 
 def sentences(filename):
@@ -48,11 +48,11 @@ def reshape_thetas(nn_params, input_layer_size, hidden_layer_size, num_labels):
     # Reshape nn_params back into the parameters Theta1 and Theta2,
     # the weight matrices for this 2 layer neural network
     Theta1_size = input_layer_size * hidden_layer_size
-    Theta1_flat = nn_params[0: Theta1_size]
-    Theta2_flat = nn_params[Theta1_size: -1]
-    Theta1 = numpy.reshape(Theta1_flat, (hidden_layer_size, input_layer_size))
-    Theta2 = numpy.reshape(Theta2_flat, (num_labels, hidden_layer_size))
-    return Theta1, Theta2
+    Theta1_flat = np.array(nn_params[0: Theta1_size])
+    Theta2_flat = np.array(nn_params[Theta1_size: -1])
+    Theta1 = np.reshape(Theta1_flat, (hidden_layer_size, -1))
+    Theta2 = np.reshape(Theta2_flat, (num_labels, -1))
+    return (Theta1, Theta2)
 
 
 def dict_to_vector(feature_dict):
@@ -70,10 +70,10 @@ def rand_init_ft_weights(L_in, L_out, epsilon_init=0.12):
 
     # randomly initialize all features weights of a layer
     # with L_in incoming connections and L_out outgoing connections
-    W = numpy.zeros(shape=(L_out, 1 + L_in))
+    W = np.zeros(shape=(L_out, 1 + L_in))
 
     # randomly initialize the weights to small values
-    W = numpy.random.rand(L_out, 1 + L_in) * 2 * epsilon_init - epsilon_init
+    W = np.random.rand(L_out, 1 + L_in) * 2 * epsilon_init - epsilon_init
 
     return W
 
@@ -85,13 +85,13 @@ def normalize_values_dict(feature_dict):
     # each feature is 0 and the standard deviation is 1
     X_norm = feature_vector
     num_features = feature_vector.length()
-    mu = numpy.zeros(1, num_features)
-    sigma = numpy.zeros(1, num_features)
+    mu = np.zeros(1, num_features)
+    sigma = np.zeros(1, num_features)
 
     # for i in range(1, num_features):
-    #     mu[i] = numpy.mean(X(:, i))
+    #     mu[i] = np.mean(X(:, i))
     #     X_norm[:, i] = X(:, i) - mu(i)
-    #     sigma[i] = numpy.std(X(:, i))
+    #     sigma[i] = np.std(X(:, i))
     #     X_norm[:, i] = X_norm(:, i) / sigma(i)
 
     normalization_dict = {}
@@ -152,6 +152,9 @@ def sentence_length_normalized_score(sentence, score):
         return 0
 
 
+# Unit Tests for functions
+
+
 def test_dict_to_vector(d):
     print("Test passed: test_dict_to_vector")
     return dict_to_vector(d)
@@ -175,7 +178,16 @@ def test_build_training_examples(training_data):
     return output
 
 
+def test_reshape_thetas(vector):
+    nn_params = vector
+    input_layer_size = 2
+    hidden_layer_size = 5
+    num_labels = 1
+    Theta1, Theta2 = reshape_thetas(nn_params, input_layer_size, hidden_layer_size, num_labels)
+    print('Theta1: {0}\nTheta2: {1}'.format(Theta1, Theta2))
+
 m = [[-1, 0, 1], [2, 3, 4], [5, 6, 7]]
+vector = np.arange(16)
 
 d = {}
 d[1] = 11
@@ -191,6 +203,7 @@ testsentences = ['r14534ishitis a good boy',
 # print(d2)
 s = "test #~`^&+-=]p\|...string number 23984!!534987"
 # test_dict_to_vector(d)
-# test_extract_features(s)
+test_extract_features(s)
 # print(test_build_training_examples(testsentences))
 # print(unroll(m))
+# test_reshape_thetas(vector)
