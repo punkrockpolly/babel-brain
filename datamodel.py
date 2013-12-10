@@ -17,6 +17,10 @@ def sentences(filename):
     return new_list
 
 
+def vectorize_results(num_english, num_spanish):
+    return [1 for x in range(num_english)] + [0 for x in range(num_spanish)]
+
+
 def string_sanitize(string_input):
     # forces lowercase and strips digits
     return string_input.lower().translate(None, string.digits + string.punctuation)
@@ -97,6 +101,15 @@ def count_letter_freq(string_input):
     return collections.Counter(string_input)
 
 
+def build_training_examples(training_data):
+    # Builds a matrix of feature values for each training example.
+    # Rows = examples, cols = features.
+    feature_values = []
+    for example in training_data:
+        feature_values.append(dict_to_vector(extract_features(example)))
+    return feature_values
+
+
 def extract_features(string_input):
     # takes a string and returns a dict of all features
     features = init_new_features_dict()
@@ -139,14 +152,26 @@ def test_ft_rand_init(rows=2, cols=3):
     return rand_init_ft_weights(rows, cols)
 
 
+def test_build_training_examples(training_data):
+    output = build_training_examples(training_data)
+    print('len of output: {0}\n# of features: {1}'.format(len(output),
+                                                          len(output[0])))
+    return output
+
+
 d = {}
 d[1] = 11
 d[2] = 22
 d[3] = 33
 d[4] = 44
 
+testsentences = ['r14534ishitis a good boy',
+                 'po is a good girl',
+                 'this $dskdj',
+                 '*&^&^&$^#~~!@@H']
 # d2 = test_ft_rand_init(5, 1)
 # print(d2)
 s = "test #~`^&+-=]p\|...string number 23984!!534987"
 # test_dict_to_vector(d)
 # test_extract_features(s)
+print(test_build_training_examples(testsentences))
