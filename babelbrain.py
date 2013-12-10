@@ -1,6 +1,8 @@
 import string
 import persistence
 import fitness
+import datamodel
+import sys
 
 
 # Neural Network's five components:
@@ -17,49 +19,41 @@ import fitness
 
 class Bot(object):
     def __init__(self):
-        self.input_layer_size = 50
-        self.hidden_layer_size = 25
-        self.num_labels = 2
-
-        self.sentences = {}
-        self.english_sentences = persistence.sentences('english-sentences.txt')
-        self.spanish_sentences = persistence.sentences('spanish-sentences.txt')
-        self.english_correct = 0
-        self.spanish_correct = 0
-        self.feature_weights = persistence.get_knowledge()
-        self.best_weights = self.feature_weights
-        self.best_score = (self.english_guesses_correct() +
-                           self.spanish_guesses_correct())
-
-    def english_guesses_correct(self):
-        self.english_correct = 0
-        for sentence in self.english_sentences:
-            if fitness.guess_is_english(sentence):
-                self.english_correct += 1
-        return self.english_correct
-
-    def spanish_guesses_correct(self):
-        self.spanish_correct = 0
-        for sentence in self.spanish_sentences:
-            if not fitness.guess_is_english(sentence):
-                self.spanish_correct += 1
-        return self.spanish_correct
-
-    # refactor to guess via fitness.predict
-    def guess_sentence(self, sentence, language):
-    # checks guess
-        if fitness.guess_is_english(sentence):
-            if language == 'english':
-                return True
-        else:
-            if language == 'spanish':
-                return True
-        return False
+        # current number of features
+        self.input_layer_size = 30
+        # current number of nodes in hidden layer
+        self.hidden_layer_size = 5
+        # current number of output classifiers
+        self.num_labels = 1
+        # generates training examples
+        self.english_sentences = datamodel.sentences('english-sentences.txt')
+        self.spanish_sentences = datamodel.sentences('spanish-sentences.txt')
+        # initialize input matrix
+        self.Ft_values = datamodel.build_training_examples(self.english_sentences
+                                                         + self.spanish_sentences)
+        # initialize results vector
+        self.y = datamodel.vectorize_results(len(self.english_sentences),
+                                             len(self.spanish_sentences))
+        # initialize feature weights
+        self.Theta1 = (datamodel.rand_init_ft_weights(
+                       self.input_layer_size,
+                       self.hidden_layer_size))
+        self.Theta2 = (datamodel.rand_init_ft_weights(
+                       self.hidden_layer_size,
+                       self.num_labels))
+        nn_params = datamodel.unroll(self.Theta1) + datamodel.unroll(self.Theta2)
+        # imports saved feature weights
+        # self.feature_weights = persistence.get_knowledge()
 
     # refactor to train via fitness.py
     def train(self):
+        print('\nTraining')
+        fitness.feed_forward(self.Theta1, self.Theta2, self.Ft_values)
+
         for letter in string.ascii_lowercase:
             for x in range(-5, 6):
+                sys.stdout.write('.')
+                sys.stdout.flush()
                 self.feature_weights[letter] = x
                 self.new_score = (self.english_guesses_correct() +
                                   self.spanish_guesses_correct())
@@ -69,7 +63,7 @@ class Bot(object):
         return self.best_weights
 
     def __str__(self):
-        output_string = '=====\n'
+        output_string = '\n=====\n'
         output_string += 'total english: \n' + str(len(self.english_sentences)) + ''
         output_string += 'english correct:' + str(self.english_correct) + '\n'
         output_string += 'total spanish:' + str(len(self.spanish_sentences)) + '\n'
