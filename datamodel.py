@@ -3,26 +3,45 @@ import collections
 import numpy
 
 
+def sentences(filename):
+    # builds list of sentences from input file, then strips empty lines
+    sentences = open(filename)
+    rawinput = sentences.read()
+    clean_string = string_sanitize(rawinput)
+    input_list = clean_string.split("\n")
+    new_list = []
+    for sentence in input_list:
+        stripped = sentence.strip()
+        if stripped != "":
+            new_list.append(stripped)
+    return new_list
+
+
+def string_sanitize(string_input):
+    # forces lowercase and strips digits
+    return string_input.lower().translate(None, string.digits + string.punctuation)
+
+
 def init_new_features_dict():
     feature_dict = {}
     # add letter freqs as features
     for letter in string.ascii_lowercase:
         feature_dict[letter] = 0
-
     # add other features to dict
     feature_dict['word_len'] = 0
     feature_dict['num_words'] = 0
     feature_dict['threshold'] = 0
-
+    feature_dict[' '] = 0
     return feature_dict
 
 
 def dict_to_vector(feature_dict):
-    return map(lambda feature: feature_dict[feature], feature_dict)
-        # list comprehension: [feature_dict[x] for x in keys in feature_dict
+    keys = sorted(feature_dict.keys())
+    return [feature_dict[k] for k in keys]
+    # return map(lambda key: feature_dict[key], feature_dict)
 
 
-# def vect_to_dict(feature_dict={}, feature_vector):
+# def vect_to_dict(feature_dict, feature_vector):
 #     for each k:v, assign
 
 
@@ -81,10 +100,12 @@ def count_letter_freq(string_input):
 def extract_features(string_input):
     # takes a string and returns a dict of all features
     features = init_new_features_dict()
-    letter_freq = count_letter_freq(string_input)
+    # forces lowercase and strips digits
+    stripped_string = string_sanitize(string_input)
+    letter_freq = count_letter_freq(stripped_string)
     features.update({k: v for k, v in letter_freq.iteritems() if v})
-    features['word_len'] = avg_word_len(string_input)
-    features['num_words'] = avg_sentance_len(string_input)
+    features['word_len'] = avg_word_len(stripped_string)
+    features['num_words'] = avg_sentance_len(stripped_string)
     return features
 
 
@@ -124,8 +145,8 @@ d[2] = 22
 d[3] = 33
 d[4] = 44
 
-# d2 = test_ft_rand_init(2, 50)
-
-s = "test string number 234534"
+# d2 = test_ft_rand_init(5, 1)
+# print(d2)
+s = "test #~`^&+-=]p\|...string number 23984!!534987"
 # test_dict_to_vector(d)
 # test_extract_features(s)
