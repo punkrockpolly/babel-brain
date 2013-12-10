@@ -39,6 +39,22 @@ def init_new_features_dict():
     return feature_dict
 
 
+def unroll(matrix):
+    # takes a matrix(list of lists) and unrolls/flattens into one list
+    return [item for sublist in matrix for item in sublist]
+
+
+def reshape_thetas(nn_params, input_layer_size, hidden_layer_size, num_labels):
+    # Reshape nn_params back into the parameters Theta1 and Theta2,
+    # the weight matrices for this 2 layer neural network
+    Theta1_size = input_layer_size * hidden_layer_size
+    Theta1_flat = nn_params[0: Theta1_size]
+    Theta2_flat = nn_params[Theta1_size: -1]
+    Theta1 = numpy.reshape(Theta1_flat, (hidden_layer_size, input_layer_size))
+    Theta2 = numpy.reshape(Theta2_flat, (num_labels, hidden_layer_size))
+    return Theta1, Theta2
+
+
 def dict_to_vector(feature_dict):
     keys = sorted(feature_dict.keys())
     return [feature_dict[k] for k in keys]
@@ -159,6 +175,8 @@ def test_build_training_examples(training_data):
     return output
 
 
+m = [[-1, 0, 1], [2, 3, 4], [5, 6, 7]]
+
 d = {}
 d[1] = 11
 d[2] = 22
@@ -174,4 +192,5 @@ testsentences = ['r14534ishitis a good boy',
 s = "test #~`^&+-=]p\|...string number 23984!!534987"
 # test_dict_to_vector(d)
 # test_extract_features(s)
-print(test_build_training_examples(testsentences))
+# print(test_build_training_examples(testsentences))
+# print(unroll(m))
