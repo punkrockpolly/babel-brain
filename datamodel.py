@@ -30,12 +30,12 @@ def init_new_features_dict():
     feature_dict = {}
     # add letter freqs as features
     for letter in string.ascii_lowercase:
-        feature_dict[letter] = 0
+        feature_dict[letter] = 0.0
     # add other features to dict
-    feature_dict['word_len'] = 0
-    feature_dict['num_words'] = 0
-    feature_dict['threshold'] = 0
-    feature_dict[' '] = 0
+    feature_dict['word_len'] = 0.0
+    feature_dict['num_words'] = 0.0
+    feature_dict['threshold'] = 0.0
+    feature_dict[' '] = 0.0
     return feature_dict
 
 
@@ -47,9 +47,9 @@ def unroll(matrix):
 def reshape_thetas(nn_params, input_layer_size, hidden_layer_size, num_labels):
     # Reshape nn_params back into the parameters Theta1 and Theta2,
     # the weight matrices for this 2 layer neural network
-    Theta1_size = input_layer_size * hidden_layer_size
+    Theta1_size = (input_layer_size + 1) * hidden_layer_size
     Theta1_flat = np.array(nn_params[0: Theta1_size])
-    Theta2_flat = np.array(nn_params[Theta1_size: -1])
+    Theta2_flat = np.array(nn_params[Theta1_size:])
     Theta1 = np.reshape(Theta1_flat, (hidden_layer_size, -1))
     Theta2 = np.reshape(Theta2_flat, (num_labels, -1))
     return (Theta1, Theta2)
@@ -57,7 +57,8 @@ def reshape_thetas(nn_params, input_layer_size, hidden_layer_size, num_labels):
 
 def dict_to_vector(feature_dict):
     keys = sorted(feature_dict.keys())
-    return [feature_dict[k] for k in keys]
+    values = [feature_dict[k] for k in keys]
+    return values
     # return map(lambda key: feature_dict[key], feature_dict)
 
 
@@ -67,14 +68,11 @@ def dict_to_vector(feature_dict):
 
 def rand_init_ft_weights(L_in, L_out, epsilon_init=0.12):
     # build a new 2-d array for Thetas: neural network layers
-
     # randomly initialize all features weights of a layer
     # with L_in incoming connections and L_out outgoing connections
     W = np.zeros(shape=(L_out, 1 + L_in))
-
     # randomly initialize the weights to small values
     W = np.random.rand(L_out, 1 + L_in) * 2 * epsilon_init - epsilon_init
-
     return W
 
 
@@ -132,7 +130,7 @@ def extract_features(string_input):
     # forces lowercase and strips digits
     stripped_string = string_sanitize(string_input)
     letter_freq = count_letter_freq(stripped_string)
-    features.update({k: v for k, v in letter_freq.iteritems() if v})
+    features.update({k: v for k, v in letter_freq.iteritems() if k in features})
     features['word_len'] = avg_word_len(stripped_string)
     features['num_words'] = avg_sentance_len(stripped_string)
     return features
@@ -175,7 +173,7 @@ def test_build_training_examples(training_data):
     output = build_training_examples(training_data)
     print('len of output: {0}\n# of features: {1}'.format(len(output),
                                                           len(output[0])))
-    return output
+    print output
 
 
 def test_reshape_thetas(vector):
@@ -195,15 +193,18 @@ d[2] = 22
 d[3] = 33
 d[4] = 44
 
-testsentences = ['r14534ishitis a good boy',
+s = "test #~`^&+-=]p\|...string number 23984!!534987"
+
+testsentences = [s,
+                 'r14534ishitis a good boy',
                  'po is a good girl',
                  'this $dskdj',
                  '*&^&^&$^#~~!@@H']
 # d2 = test_ft_rand_init(5, 1)
 # print(d2)
-s = "test #~`^&+-=]p\|...string number 23984!!534987"
 # test_dict_to_vector(d)
-test_extract_features(s)
-# print(test_build_training_examples(testsentences))
+# test_extract_features(s)
+# test_build_training_examples(testsentences)
 # print(unroll(m))
+# print(vector)
 # test_reshape_thetas(vector)
