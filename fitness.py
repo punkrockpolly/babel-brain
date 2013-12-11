@@ -1,5 +1,4 @@
 import numpy as np
-import persistence as ps
 import datamodel as dt
 
 
@@ -9,49 +8,11 @@ def sigmoid(z):
     return 1.0 / (1.0 + np.exp(-z))
 
 
-def classification_score(ft_values, ft_weights):
-    # features values = featurename -> normalizedfeatureValue
-    # feature weights  = featurename -> feature weight
-    score = 0
-    for f in ft_weights:
-        score += ft_values[f] * ft_weights[f]
-    return score
-
-
-def guess_is_english(sentence):
-    # get feature weights
-    # refactor into forward prop code below
-
-    ft_weights = ps.get_knowledge()
-    # feature vals
-    ft_values = dt.extract_features(sentence)
-    # calc score
-    score = classification_score(ft_values, ft_weights)
-    # get threshold
-    threshold = 50
-    # compare score to threshhold
-    if score > threshold:
-        #print("We think this is English", sentence)
-        return True
-    else:
-        #print("We think this is Spanish", sentence)
-        return False
-
-
 # genetic algorithm optimization for neural network:
 # ----------------------------------
 
-#   parameters for the neural network are "unrolled" into the vector
-#   nn_params and need to be converted back into the weight matrices.
 
-#   The returned parameter grad should be a "unrolled" vector of the
-#   partial derivatives of the neural network.
-
-#   1. implement neural network forward prop code (currently in Octave)
-#   2. integrate genetic.py
-
-
-# neural network forward prop code (currently in Octave)
+# neural network forward prop code
 # ----------------------------------
 # A feedforward network is one whoso topology has no closed paths.
 # Its input nodes are the ones with no arcs to them, and its output nodes
@@ -79,12 +40,13 @@ def feed_forward(Theta1, Theta2, Ft_values):
 
     # Add ones to the A2 data matrix
     A2 = np.column_stack((np.ones((m, 1)), A2))
-    print(A2.shape)
-    print(A2)
-    print(np.matrix(Theta2).shape)
-    print(np.matrix(Theta2))
+    # print(A2.shape)
+    # print(A2)
+    # print(np.matrix(Theta2).shape)
+    # print(np.matrix(Theta2))
     # Output Layer (hypothesis = A3)
     Z3 = A2.dot(np.transpose(Theta2))
+    # print(Z3)
     A3 = sigmoid(Z3)
     return A3
 
@@ -115,9 +77,20 @@ def cost_function(nn_params,
     # Setup some useful variables
     m = np.size(Ft_values, 0)
     J = 0
+    y = np.array(y)
+    # print(y, A3)
+    wrong = np.sum(np.absolute(np.subtract(y, np.round(A3))))
 
-    J = sum(sum(-y.dot(log(np.transpose(A3))) - (1 - y).dot(log(1 - np.transpose(A3))))/m)
+    J = np.sum(np.sum(-y * (np.log(A3)) - (1 - y) * (np.log(1 - A3)))) / m
+    return J, wrong
+
 # --------------------------------------
 # Implement genetic.py to mutate Thetas
 # --------------------------------------
-    return J
+
+
+def test_sigmoid():
+    z = [12, -423, 0]
+    print sigmoid(np.array(z))
+
+# test_sigmoid()
