@@ -86,7 +86,6 @@ def feed_forward(Theta1, Theta2, Ft_values):
     # Output Layer (hypothesis = A3)
     Z3 = A2.dot(np.transpose(Theta2))
     A3 = sigmoid(Z3)
-
     return A3
 
 
@@ -103,14 +102,14 @@ def cost_function(nn_params,
     # num_labels: number of classifiers: used to reshape Thetas
     # Ft_values: input matrix
     # y: result vector
-    print(np.array(nn_params).size, input_layer_size,
-                                       hidden_layer_size,
-                                       num_labels)
+    # print(np.array(nn_params).size, input_layer_size,
+    #                                    hidden_layer_size,
+    #                                    num_labels)
     Theta1, Theta2 = dt.reshape_thetas(nn_params,
                                        input_layer_size,
                                        hidden_layer_size,
                                        num_labels)
-    print(Theta1.size, Theta2.size)
+    # print(Theta1.size, Theta2.size)
     A3 = feed_forward(Theta1, Theta2, Ft_values)
 
     # Setup some useful variables
