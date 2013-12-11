@@ -72,7 +72,7 @@ def rand_init_ft_weights(L_in, L_out, epsilon_init=0.12):
     # with L_in incoming connections and L_out outgoing connections
     W = np.zeros(shape=(L_out, 1 + L_in))
     # randomly initialize the weights to small values
-    W = np.random.rand(L_out, 1 + L_in) * 2 * epsilon_init - epsilon_init
+    W = (np.random.rand(L_out, 1 + L_in) * (2 * epsilon_init)) - epsilon_init
     return W
 
 
