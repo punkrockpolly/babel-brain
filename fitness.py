@@ -116,13 +116,7 @@ def cost_function(nn_params,
     m = np.size(Ft_values, 0)
     J = 0
 
-# y_matrix = zeros(size(A3`))
-
-# for inum in range(1, m):
-#     y_matrix(:, inum) = np.eye(num_labels)(:, y(inum, :))`
-
-# J = sum(sum(-y_matrix .* log(A3`) - (1 - y_matrix) .* log(1 - A3`)) / m) + reg_term
-
+    J = sum(sum(-y.dot(log(np.transpose(A3))) - (1 - y).dot(log(1 - np.transpose(A3))))/m)
 # --------------------------------------
 # Implement genetic.py to mutate Thetas
 # --------------------------------------
