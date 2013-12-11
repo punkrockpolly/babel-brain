@@ -4,14 +4,9 @@ import datamodel as dt
 
 
 def sigmoid(z):
-# g = SIGMOIDGRADIENT(z) computes the gradient of the sigmoid function
-# evaluated at z. This should work regardless if z is a matrix or a
-# vector. In particular, if z is a vector or matrix, you should return
-# the gradient for each element.
-    # g = np.zeros(size(z))
-    # gz = 1.0 ./ (1.0 + exp(-z))
-    # g = (gz .* (1.0 - gz))
-    return
+# g: the sigmoid function evaluated at z.
+# This should work regardless if z is a matrix or a vector.
+    return 1.0 / (1.0 + np.exp(-z))
 
 
 def classification_score(ft_values, ft_weights):
@@ -67,24 +62,30 @@ def feed_forward(Theta1, Theta2, Ft_values):
 # Part 1: Forward propagation for the hypothesis
 #         Feedforward the neural network.
 
-    # Add ones to the Ft_values (A1) data matrix
-    Ft_values = np.matrix([[1] + item for item in Ft_values])
+    m = np.size(Ft_values, 0)
 
-    print(Ft_values.shape)
-    print(Ft_values)
-    print(np.matrix(Theta1).shape)
-    print(np.matrix(Theta1))
+    # Add biad terms (ones) to the Ft_values (A1) data matrix
+    Ft_values = np.matrix([[1.0] + item for item in Ft_values])
+
+    # Ft_values = np.matrix(Ft_values)
+    # print(Ft_values.shape)
+    # print(Ft_values)
+    # print(np.matrix(Theta1).shape)
+    # print(np.matrix(Theta1))
 
     # Hidden Layer
-    Z2 = np.matrix(Ft_values) * np.transpose(Theta1)
-    A2 = np.sigmoid(Z2)
+    Z2 = Ft_values.dot(np.transpose(Theta1))
+    A2 = sigmoid(Z2)
 
     # Add ones to the A2 data matrix
-    A2 = [np.ones]
-
+    A2 = np.column_stack((np.ones((m, 1)), A2))
+    print(A2.shape)
+    print(A2)
+    print(np.matrix(Theta2).shape)
+    print(np.matrix(Theta2))
     # Output Layer (hypothesis = A3)
-    Z3 = A2 * np.matrix(np.transpose(Theta2))
-    A3 = np.sigmoid(Z3)
+    Z3 = A2.dot(np.transpose(Theta2))
+    A3 = sigmoid(Z3)
 
     return A3
 
@@ -102,15 +103,18 @@ def cost_function(nn_params,
     # num_labels: number of classifiers: used to reshape Thetas
     # Ft_values: input matrix
     # y: result vector
+    print(np.array(nn_params).size, input_layer_size,
+                                       hidden_layer_size,
+                                       num_labels)
     Theta1, Theta2 = dt.reshape_thetas(nn_params,
                                        input_layer_size,
                                        hidden_layer_size,
                                        num_labels)
-
+    print(Theta1.size, Theta2.size)
     A3 = feed_forward(Theta1, Theta2, Ft_values)
 
     # Setup some useful variables
-    m = np.size(Ft_values, 1)
+    m = np.size(Ft_values, 0)
     J = 0
 
 # y_matrix = zeros(size(A3`))
