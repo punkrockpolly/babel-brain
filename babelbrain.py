@@ -1,7 +1,7 @@
 import string
 import persistence
 import fitness
-import datamodel
+import datamodel as dt
 import sys
 
 
@@ -28,22 +28,22 @@ class Bot(object):
         # initialize correct
         self.correct = 0
         # generates training examples
-        self.english_sentences = datamodel.sentences('english-sentences.txt')
-        self.spanish_sentences = datamodel.sentences('spanish-sentences.txt')
+        self.english_sentences = dt.sentences('english-sentences.txt')
+        self.spanish_sentences = dt.sentences('spanish-sentences.txt')
         # initialize input matrix
-        self.Ft_values = datamodel.build_training_examples(self.english_sentences
+        self.Ft_values = dt.build_training_examples(self.english_sentences
                                                          + self.spanish_sentences)
         # initialize results vector
-        self.y = datamodel.vectorize_results(len(self.english_sentences),
-                                             len(self.spanish_sentences))
+        self.y = dt.vectorize_results(len(self.english_sentences),
+                                      len(self.spanish_sentences))
         # initialize feature weights
-        self.Theta1 = (datamodel.rand_init_ft_weights(
+        self.Theta1 = (dt.rand_init_ft_weights(
                        self.input_layer_size,
                        self.hidden_layer_size))
-        self.Theta2 = (datamodel.rand_init_ft_weights(
+        self.Theta2 = (dt.rand_init_ft_weights(
                        self.hidden_layer_size,
                        self.num_labels))
-        self.nn_params = datamodel.unroll(self.Theta1) + datamodel.unroll(self.Theta2)
+        self.nn_params = dt.unroll(self.Theta1) + dt.unroll(self.Theta2)
         # imports saved feature weights
         # self.nn_params = persistence.get_knowledge()
 
