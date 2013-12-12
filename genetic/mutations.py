@@ -13,11 +13,11 @@ def mutateGene(pGene, pValidChars):
 	pValidChars = list(pValidChars)
 
 	pGene[random.randint(0,len(pGene)-1)] = pValidChars[random.randint(0,len(pValidChars)-1)]
-	pGene = ("".join(pGene))
+	#pGene = ("".join(pGene))
 	return pGene
 
-#pop = ["XXXXX","XXXXX","XXXXX","XXXXX","XXXXX","XXXXX"]
-#listPrint(mutatePopulation(pop,0.05,"1234567890"))
+#pop = [[1,1,1,1,1],[2,2,2,2],[3,3,3,3]]
+#print (mutatePopulation(pop,0.5,[1,2,3,4,5,6]))
 
 
 
