@@ -1,8 +1,8 @@
 import json
-import datamodel
+import datamodel as dt
 
 
-def isFile(filename):
+def is_file(filename):
     try:
         with open(filename):
             return True
@@ -23,11 +23,11 @@ def save_knowledge(knowledge_dict):
 
 
 def get_knowledge():
-    if isFile('knowledge.txt'):
+    if is_file('knowledge.txt'):
         return json_to_dict(get_file_contents('knowledge.txt'))
     else:
         print("A NEW DICT WAS GENERATED.")
-        feature_dict = datamodel.new_feature_weights()
+        feature_dict = dt.new_feature_weights()
         save_knowledge(feature_dict)
         return feature_dict
 
@@ -46,26 +46,13 @@ def get_file_contents(filename):
     return text
 
 
-def sentences(filename):
-    # builds list of sentences from input file, then strips empty lines
-    sentences = open(filename)
-    rawinput = sentences.read().lower()
-    input_list = rawinput.split("\n")
-    new_list = []
-    for sentence in input_list:
-        stripped = sentence.strip()
-        if stripped != "":
-            new_list.append(stripped)
-    return new_list
-
-
 def testWrite(my_dict):
     assert write_to_file('test.txt', dict_to_json(my_dict))
     print("write test success")
 
 
 def testRead(filename):
-    if isFile(filename):
+    if is_file(filename):
         assert json_to_dict(get_file_contents(filename))
         print("read test success")
 
