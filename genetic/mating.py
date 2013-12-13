@@ -132,6 +132,6 @@ def listPrint(pList):
 		print item
 
 #TESTING
-#listPrint(cutAndSplice("----------", "OOOOOOOOOO",12))
+#listPrint(cutAndSplice([1,1,1,1,1,1], [0,0,0,0,0,0],12))
 #listPrint(nPointCrossover("XXXXXXXXXXXXXXXXXXXX", "OOOOOOOOOOOOOOOOOOOO", 6, 4))
 #listPrint(uniformCrossover("111133331111", "111144441111", 12))
