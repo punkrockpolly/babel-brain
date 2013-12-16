@@ -4,8 +4,8 @@ import mating
 import mutations
 
 def theSolution():
-	#Define soluti
-	return "12345678"
+	#Define solution
+	return [1,2,3,4,5]
 
 def levD(s1,s2):
     if len(s1) > len(s2):
@@ -23,10 +23,11 @@ def levD(s1,s2):
         distances = newDistances
     return distances[-1]
 
-def randomString(pLength):
+def randomString(pLength, charset=None):
+	if charset == None: charset = string.digits
 	#RETURN UPPERCASE, lowercase, Numb3rs.
 	# Uses this awesome compact method: http://stackoverflow.com/questions/2257441/python-random-string-generation-with-upper-case-letters-and-digits
-	return ''.join(random.choice(string.digits) for x in range(pLength))
+	return ''.join(random.choice(charset) for x in range(pLength))
 	#if pLength == 'None': pLength = random.randint(3,30)
 	#return ''.join(random.choice(string.ascii_uppercase + " ") for x in range(pLength))
 
