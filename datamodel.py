@@ -1,6 +1,7 @@
 import string
 import collections
 import numpy as np
+# import pdb
 
 
 def sentences(filename):
@@ -80,19 +81,21 @@ def rand_init_ft_weights(L_in, L_out, epsilon_init=0.12):
 def feature_normalize(features):
     # returns a normalized version of features list where the mean value of
     # each feature is 0 and the standard deviation is 1
+    features = np.array(features)
     features_norm = features
     num_features = len(features[0])
     # print('num features: {0}'.format(num_features))
-    mu = np.zeros((1, num_features))
+    mu = np.zeros((num_features))
     # mu = np.zeros(num_features, 1)
-    sigma = np.zeros((1, num_features))
+    sigma = np.zeros((num_features))
 
     for i in range(0, num_features):
-        print("i:", i)
+        # pdb.set_trace()
         mu[i] = np.mean(features[:, i])
-        features_norm[:, i] = features[:, i] - mu(i)
+        features_norm[:, i] = features[:, i] - mu[i]
         sigma[i] = np.std(features[:, i])
-        features_norm[:, i] = features_norm[:, i] / sigma(i)
+        if sigma[i] != 0:
+            features_norm[:, i] = features_norm[:, i] / sigma[i]
 
     normalized_dict = {}
     normalized_dict['features_norm'] = features_norm
@@ -138,22 +141,7 @@ def extract_features(string_input):
     return features
 
 
-def sentence_length_normalized_score(sentence, score):
-    # returns a score that immune to sentence length,
-    # thereby highlighing only the results of freq analysis
-    total_valid_chars = 0
-    for letter in string.ascii_lowercase:
-            total_valid_chars += sentence.count(letter)
-    if total_valid_chars != 0:
-        return (float(score) / total_valid_chars)
-    else:
-        # this will have to change in the future as the thresholds
-        # become more sophisticated.
-        return 0
-
-
 # Unit Tests for functions
-
 
 def test_dict_to_vector():
     d = {}

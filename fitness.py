@@ -23,14 +23,15 @@ def feed_forward(Theta1, Theta2, Ft_values):
 # Part 1: Forward propagation for the hypothesis
 #         Feedforward the neural network.
 
-    m = np.size(Ft_values, 0)
+    m = np.size(Ft_values, 0)  # number of training examples
+    n = np.size(Ft_values, 1)  # number of features
 
-    # Add biad terms (ones) to the Ft_values (A1) data matrix
-    Ft_values = np.matrix([[1.0] + item for item in Ft_values])
-
-    # Ft_values = np.matrix(Ft_values)
     # print(Ft_values.shape)
     # print(Ft_values)
+
+    # Add bias terms (ones) to the Ft_values (A1) data matrix
+    Ft_values = np.column_stack((np.ones((m, 1)), Ft_values))
+
     # print(np.matrix(Theta1).shape)
     # print(np.matrix(Theta1))
 

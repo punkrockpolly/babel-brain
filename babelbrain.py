@@ -46,6 +46,7 @@ class Bot(object):
         self.nn_params = dt.unroll(self.Theta1) + dt.unroll(self.Theta2)
         # imports saved feature weights
         # self.nn_params = persistence.get_knowledge()
+        self.norm_Fts = dt.feature_normalize(self.Ft_values)['features_norm']
 
     # refactor to train via fitness.py
     def train(self):
@@ -54,7 +55,7 @@ class Bot(object):
                                     self.input_layer_size,
                                     self.hidden_layer_size,
                                     self.num_labels,
-                                    self.Ft_values,
+                                    self.norm_Fts,
                                     self.y))
 
         # for letter in string.ascii_lowercase:
