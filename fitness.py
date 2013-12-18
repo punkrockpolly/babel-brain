@@ -22,9 +22,10 @@ def sigmoid(z):
 def feed_forward(Theta1, Theta2, Ft_values):
 # Part 1: Forward propagation for the hypothesis
 #         Feedforward the neural network.
+#         Predicts A3 (hypothesis) based on Thetas and Ft_values
 
     m = np.size(Ft_values, 0)  # number of training examples
-    n = np.size(Ft_values, 1)  # number of features
+    # n = np.size(Ft_values, 1)  # number of features
 
     # print(Ft_values.shape)
     # print(Ft_values)
