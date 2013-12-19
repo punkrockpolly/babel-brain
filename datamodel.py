@@ -77,7 +77,6 @@ def rand_init_ft_weights(L_in, L_out, epsilon_init=0.12):
     return W
 
 
-# Refactor to fix feature_normalize - DOES NOT WORK
 def feature_normalize(features):
     # returns a normalized version of features list where the mean value of
     # each feature is 0 and the standard deviation is 1
@@ -86,7 +85,6 @@ def feature_normalize(features):
     num_features = len(features[0])
     # print('num features: {0}'.format(num_features))
     mu = np.zeros((num_features))
-    # mu = np.zeros(num_features, 1)
     sigma = np.zeros((num_features))
 
     for i in range(0, num_features):
@@ -101,7 +99,6 @@ def feature_normalize(features):
     normalized_dict['features_norm'] = features_norm
     normalized_dict['mu'] = mu
     normalized_dict['sigma'] = sigma
-
     return normalized_dict
 
 
@@ -111,7 +108,7 @@ def avg_word_len(string_input):
     return float(total_chars_in_words) / words
 
 
-def avg_sentance_len(string_input):
+def sentance_len(string_input):
     return string_input.count(' ') + 1
 
 
@@ -137,7 +134,7 @@ def extract_features(string_input):
     letter_freq = count_letter_freq(stripped_string)
     features.update({k: v for k, v in letter_freq.iteritems() if k in features})
     features['word_len'] = avg_word_len(stripped_string)
-    features['num_words'] = avg_sentance_len(stripped_string)
+    features['num_words'] = sentance_len(stripped_string)
     return features
 
 
