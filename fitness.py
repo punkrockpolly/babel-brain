@@ -80,8 +80,10 @@ def cost_function(nn_params,
     m = np.size(Ft_values, 0)
     J = 0
     y = np.array(y)
+
     # print(y, A3)
-    wrong = np.sum(np.absolute(np.subtract(y, np.round(A3))))
+    # wrong = np.sum(np.absolute(np.subtract(y, np.round(A3))))
+    wrong = np.sum(y - A3)
 
     J = np.sum(np.sum(-y * (np.log(A3)) - (1 - y) * (np.log(1 - A3)))) / m
     return J, wrong
